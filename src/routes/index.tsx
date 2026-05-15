@@ -1,4 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { SiteFooter } from "@/components/SiteFooter";
 import { motion } from "framer-motion";
 import {
   ArrowRight,
@@ -70,7 +71,7 @@ export const Route = createFileRoute("/")({
 
 const challenges = [
   { icon: MapPin, title: "Multi-state variations", impact: "28 different state labour regimes." },
-  { icon: Layers, title: "236 Acts. 10,000+ obligations", impact: "Overlapping duties across four new Labour Codes." },
+  { icon: Layers, title: "250+ Acts. 1500+ obligations", impact: "Overlapping duties across four new Labour Codes." },
   { icon: Clock3, title: "Frequent amendments", impact: "Over 100 regulatory changes every year." },
   { icon: FolderOpen, title: "Record maintenance", impact: "50+ registers and periodic statutory filings." },
 ];
@@ -196,11 +197,11 @@ function Home() {
             <div className="grid grid-cols-2 gap-4 md:gap-5">
               {[
                 {
-                  value: "236+",
+                  value: "250+",
                   label: "Acts and labour law obligations across complex regulatory environments.",
                 },
                 {
-                  value: "10,000+",
+                  value: "1500+",
                   label: "Compliance checkpoints, records, filings, and ongoing obligations to manage.",
                 },
                 {
@@ -351,7 +352,7 @@ function Home() {
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-12 md:gap-8">
             <CounterStat value={25} suffix="+" label="Years of specialised front-line experience" />
             <CounterStat value={300} suffix="+" label="Domestic enquiries successfully resolved" />
-            <CounterStat value={20} suffix="+" label="Enterprise clients pan-India" />
+            <CounterStat value={120} suffix="+" label="Enterprise clients pan-India" />
             <CounterStat value={3} label="Regions served across two continents" />
           </div>
         </div>
@@ -404,26 +405,17 @@ function Home() {
                 </button>
               )}
             />
-            <a
+            {/* <a
               href="mailto:contact@ssacompliance.com"
               className="inline-flex items-center gap-2 text-paper px-8 py-3.5 rounded-full text-[15px] font-normal border border-paper/20 hover:bg-paper/10 transition"
             >
               Download checklist
-            </a>
+            </a> */}
           </div>
         </div>
       </section>
 
-      {/* FOOTER */}
-      <footer className="bg-ink text-paper/55 border-t border-paper/10">
-        <div className="mx-auto max-w-7xl px-6 lg:px-12 py-12 flex flex-col md:flex-row items-start md:items-center justify-between gap-6 text-[13px] font-light">
-          <div>
-            <div className="text-paper font-normal">SSA Compliance Services LLP</div>
-            <div className="mt-1">Bengaluru · Mumbai · Singapore · Dubai</div>
-          </div>
-          <div>© {new Date().getFullYear()} SSA Compliance. All rights reserved.</div>
-        </div>
-      </footer>
+      <SiteFooter />
     </div>
   );
 }

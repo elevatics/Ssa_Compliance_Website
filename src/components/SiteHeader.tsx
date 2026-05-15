@@ -1,9 +1,10 @@
 import { Link } from "@tanstack/react-router";
 import { ArrowRight, Menu, X } from "lucide-react";
 import { useState } from "react";
+import ssaLogo from "../assets/SSA LOGO.png";
 
 type NavLink = {
-  to: "/" | "/services" | "/products" | "/why-ssa" | "/insights" | "/about";
+  to: "/" | "/services" | "/products" | "/why-ssa" | "/insights" | "/about" | "/publications";
   label: string;
   exact?: boolean;
 };
@@ -14,6 +15,7 @@ const NAV_LINKS: NavLink[] = [
   { to: "/products", label: "Products" },
   { to: "/why-ssa", label: "Why SSA" },
   { to: "/insights", label: "Insights" },
+  { to: "/publications", label: "Publications" },
   { to: "/about", label: "About" },
 ];
 
@@ -23,8 +25,8 @@ export function SiteHeader() {
   return (
     <header className="sticky top-0 z-50 glass border-b border-rule/60">
       <div className="mx-auto max-w-7xl px-6 lg:px-12 h-20 flex items-center justify-between">
-        <Link to="/" className="text-xl font-normal tracking-tight">
-          SSA <span className="text-muted-ink">Compliance</span>
+        <Link to="/" className="flex items-center">
+          <img src={ssaLogo} alt="SSA Compliance" className="h-14 w-auto" />
         </Link>
 
         <nav className="hidden md:flex items-center gap-10 text-[15px] font-normal text-muted-ink">

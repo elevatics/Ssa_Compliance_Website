@@ -1,4 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { SiteFooter } from "@/components/SiteFooter";
 import { motion } from "framer-motion";
 import {
   ArrowRight,
@@ -68,11 +69,11 @@ const publications = [
 ];
 
 const capabilities = [
-  { num: "01", icon: Gavel, label: "Contracts & Litigations" },
+  { num: "01", icon: Gavel, label: "Labour Law Contracts" },
   { num: "02", icon: ShieldCheck, label: "Social Security & Industry Guidance" },
   { num: "03", icon: Users, label: "Employee Relations & Gender Equality" },
   { num: "04", icon: ClipboardList, label: "HR Compliance Management" },
-  { num: "05", icon: FileSignature, label: "Policy & Contract Drafting" },
+  { num: "05", icon: FileSignature, label: "Policy and HR letter Drafting" },
   { num: "06", icon: BookOpen, label: "Mandatory Compliances" },
 ];
 
@@ -112,61 +113,7 @@ function InsightsPage() {
         </div>
       </section>
 
-      {/* PUBLICATIONS */}
-      <section className="bg-bone">
-        <div className="mx-auto max-w-7xl px-6 lg:px-12 py-32 md:py-44">
-          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-16 md:mb-20">
-            <div className="max-w-2xl">
-              <div className="eyebrow mb-6">Publications</div>
-              <h2 className="font-display text-3xl md:text-5xl tracking-tight leading-[1.1]">
-                Six perspectives shaping
-                <span className="block text-accent-orange">India&rsquo;s workforce policy.</span>
-              </h2>
-            </div>
-            <div className="text-[13px] text-muted-ink font-light">
-              {publications.length} publications · Free to download
-            </div>
-          </div>
-
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
-            {publications.map((p, i) => (
-              <motion.article
-                key={p.title}
-                initial={{ opacity: 0, y: 24 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-60px" }}
-                transition={{ duration: 0.5, delay: i * 0.06 }}
-                className="group relative bg-paper border border-rule/60 rounded-3xl p-8 flex flex-col min-h-[320px] hover:border-accent-blue/40 hover:shadow-lg hover:shadow-ink/5 transition"
-              >
-                {/* Cover band */}
-                <div className="h-20 -mx-8 -mt-8 mb-8 rounded-t-3xl bg-gradient-to-br from-accent-blue/10 via-bone to-accent-orange/10 flex items-center justify-end pr-6">
-                  <FileText className="h-5 w-5 text-ink/30 stroke-[1.5]" />
-                </div>
-
-                <div className="text-[11px] font-mono uppercase tracking-widest text-accent-orange mb-4">
-                  {p.tag}
-                </div>
-                <h3 className="font-display text-xl font-normal tracking-tight leading-snug text-ink">
-                  {p.title}
-                </h3>
-                <p className="mt-3 text-[14px] text-muted-ink font-light leading-relaxed">
-                  {p.desc}
-                </p>
-
-                <div className="mt-auto pt-8 flex items-center justify-between">
-                  <span className="text-[12px] text-muted-ink font-light">PDF · 2024</span>
-                  <button
-                    type="button"
-                    className="inline-flex items-center gap-1.5 text-[13px] font-normal text-accent-blue hover:text-accent-orange transition"
-                  >
-                    Download <Download className="h-3.5 w-3.5" />
-                  </button>
-                </div>
-              </motion.article>
-            ))}
-          </div>
-        </div>
-      </section>
+     
 
       {/* CAPABILITIES GRID */}
       <section className="bg-ink text-paper">
@@ -241,16 +188,7 @@ function InsightsPage() {
         </div>
       </section>
 
-      {/* FOOTER */}
-      <footer className="bg-ink text-paper/55 border-t border-paper/10">
-        <div className="mx-auto max-w-7xl px-6 lg:px-12 py-12 flex flex-col md:flex-row items-start md:items-center justify-between gap-6 text-[13px] font-light">
-          <div>
-            <div className="text-paper font-normal">SSA Compliance Services LLP</div>
-            <div className="mt-1">Bengaluru · Mumbai · Singapore · Dubai</div>
-          </div>
-          <div>© {new Date().getFullYear()} SSA Compliance. All rights reserved.</div>
-        </div>
-      </footer>
+      <SiteFooter />
     </div>
   );
 }

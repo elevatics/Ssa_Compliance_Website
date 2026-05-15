@@ -1,4 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { SiteFooter } from "@/components/SiteFooter";
 import { motion } from "framer-motion";
 import {
   ArrowRight,
@@ -111,7 +112,7 @@ const cases = [
   { icon: UserCheck, label: "Protect employer & employee rights" },
   { icon: Lightbulb, label: "Future-proof policies" },
   { icon: Handshake, label: "Support M&A readiness" },
-  { icon: Rocket, label: "Mitigate startup & scale-up risks" },
+  { icon: Rocket, label: "Mitigate startup and scale-up risks under Labour Laws" },
 ];
 
 function WhySSAPage() {
@@ -317,16 +318,7 @@ function WhySSAPage() {
         </div>
       </section>
 
-      {/* FOOTER */}
-      <footer className="bg-ink text-paper/55 border-t border-paper/10">
-        <div className="mx-auto max-w-7xl px-6 lg:px-12 py-12 flex flex-col md:flex-row items-start md:items-center justify-between gap-6 text-[13px] font-light">
-          <div>
-            <div className="text-paper font-normal">SSA Compliance Services LLP</div>
-            <div className="mt-1">Bengaluru · Mumbai · Singapore · Dubai</div>
-          </div>
-          <div>© {new Date().getFullYear()} SSA Compliance. All rights reserved.</div>
-        </div>
-      </footer>
+      <SiteFooter />
     </div>
   );
 }

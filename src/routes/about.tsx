@@ -1,4 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { SiteFooter } from "@/components/SiteFooter";
 import { motion } from "framer-motion";
 import {
   ArrowRight,
@@ -61,12 +62,6 @@ const leadership = [
     role: "Co-Founder & Chief Regulatory Officer",
     bio: "25+ years in Labour & Employment law.",
     initials: "SB",
-  },
-  {
-    name: "Joy Chakraborty",
-    role: "Co-Founder & VP Compliance",
-    bio: "20 years in Compliance & Governance.",
-    initials: "JC",
   },
   {
     name: "Ajmal Palliyal",
@@ -206,7 +201,7 @@ function AboutPage() {
           <div className="max-w-4xl mb-20 md:mb-24">
             <div className="eyebrow mb-6">Leadership</div>
             <h2 className="font-display text-4xl md:text-6xl tracking-tight leading-[1.05]">
-              The partners behind every
+              The Experts Behind Every
               <span className="block text-accent-blue font-light">strategic decision.</span>
             </h2>
           </div>
@@ -301,7 +296,7 @@ function AboutPage() {
           <div className="eyebrow mb-8">Engage</div>
           <h2 className="font-display text-4xl md:text-7xl tracking-tight leading-[1.05] font-light">
             Speak with our
-            <span className="block text-paper/45">founding partners.</span>
+            <span className="block text-paper/45">Experts</span>
           </h2>
           <div className="mt-12 flex flex-wrap gap-3 justify-center">
             <BookingDialog
@@ -325,16 +320,7 @@ function AboutPage() {
         </div>
       </section>
 
-      {/* FOOTER */}
-      <footer className="bg-ink text-paper/55 border-t border-paper/10">
-        <div className="mx-auto max-w-7xl px-6 lg:px-12 py-12 flex flex-col md:flex-row items-start md:items-center justify-between gap-6 text-[13px] font-light">
-          <div>
-            <div className="text-paper font-normal">SSA Compliance Services LLP</div>
-            <div className="mt-1">Bengaluru · Mumbai · Singapore · Dubai</div>
-          </div>
-          <div>© {new Date().getFullYear()} SSA Compliance. All rights reserved.</div>
-        </div>
-      </footer>
+      <SiteFooter />
     </div>
   );
 }

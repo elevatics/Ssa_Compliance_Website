@@ -1,4 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { SiteFooter } from "@/components/SiteFooter";
 import { motion } from "framer-motion";
 import {
   ArrowRight,
@@ -75,7 +76,7 @@ const features = [
   {
     icon: MapPinned,
     title: "State & Act-Wise Tracking",
-    desc: "Pan-India coverage of 236+ acts, mapped to every location and entity in your group.",
+    desc: "Pan-India coverage of 250+ acts, mapped to every location and entity in your group.",
   },
 ];
 
@@ -275,22 +276,7 @@ function ProductsPage() {
         </div>
       </section>
 
-      {/* FOOTER */}
-      <footer className="bg-ink text-paper/55 border-t border-paper/10">
-        <div className="mx-auto max-w-7xl px-6 lg:px-12 py-12 flex flex-col md:flex-row items-start md:items-center justify-between gap-6 text-[13px] font-light">
-          <div>
-            <div className="text-paper font-normal">
-              SSA Compliance Services LLP
-            </div>
-            <div className="mt-1">
-              Bengaluru · Mumbai · Singapore · Dubai
-            </div>
-          </div>
-          <div>
-            © {new Date().getFullYear()} SSA Compliance. All rights reserved.
-          </div>
-        </div>
-      </footer>
+      <SiteFooter />
     </div>
   );
 }

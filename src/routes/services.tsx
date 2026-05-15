@@ -1,4 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { SiteFooter } from "@/components/SiteFooter";
 import { motion, AnimatePresence } from "framer-motion";
 import { useState } from "react";
 import {
@@ -38,7 +39,7 @@ export const Route = createFileRoute("/services")({
   component: ServicesPage,
 });
 
-type TabKey = "advisory" | "audit" | "records" | "posh";
+type TabKey = "advisory" | "Labour Law and HR Audits" | "records" | "posh";
 
 const tabs: {
   key: TabKey;
@@ -64,8 +65,8 @@ const tabs: {
     ],
   },
   {
-    key: "audit",
-    label: "Audit",
+    key: "Labour Law and HR Audits",
+    label: "Labour Law and HR Audits",
     icon: ClipboardCheck,
     headline: "Forensic audits across every state, every contractor.",
     intro:
@@ -340,16 +341,7 @@ function ServicesPage() {
         </div>
       </section>
 
-      {/* FOOTER */}
-      <footer className="bg-ink text-paper/55 border-t border-paper/10">
-        <div className="mx-auto max-w-7xl px-6 lg:px-12 py-12 flex flex-col md:flex-row items-start md:items-center justify-between gap-6 text-[13px] font-light">
-          <div>
-            <div className="text-paper font-normal">SSA Compliance Services LLP</div>
-            <div className="mt-1">Bengaluru · Mumbai · Singapore · Dubai</div>
-          </div>
-          <div>© {new Date().getFullYear()} SSA Compliance. All rights reserved.</div>
-        </div>
-      </footer>
+      <SiteFooter />
     </div>
   );
 }
