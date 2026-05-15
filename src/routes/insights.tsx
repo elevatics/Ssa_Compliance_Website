@@ -108,7 +108,7 @@ function InsightsPage() {
             transition={{ duration: 0.8, delay: 0.3 }}
             className="mt-10 text-lg md:text-xl text-muted-ink max-w-2xl leading-relaxed font-light"
           >
-            Research, briefings and white papers from our partners — written for the boards and HR leaders we serve.
+            Research, briefings and white papers from our partners — written for the Boards and HR leaders we serve.
           </motion.p>
         </div>
       </section>

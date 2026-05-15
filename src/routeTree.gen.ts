@@ -16,6 +16,7 @@ import { Route as ProductsRouteImport } from './routes/products'
 import { Route as InsightsRouteImport } from './routes/insights'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as PublicationSlugRouteImport } from './routes/publication.$slug'
 
 const WhySsaRoute = WhySsaRouteImport.update({
   id: '/why-ssa',
@@ -52,6 +53,11 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PublicationSlugRoute = PublicationSlugRouteImport.update({
+  id: '/publication/$slug',
+  path: '/publication/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -61,6 +67,7 @@ export interface FileRoutesByFullPath {
   '/publications': typeof PublicationsRoute
   '/services': typeof ServicesRoute
   '/why-ssa': typeof WhySsaRoute
+  '/publication/$slug': typeof PublicationSlugRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -70,6 +77,7 @@ export interface FileRoutesByTo {
   '/publications': typeof PublicationsRoute
   '/services': typeof ServicesRoute
   '/why-ssa': typeof WhySsaRoute
+  '/publication/$slug': typeof PublicationSlugRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -80,6 +88,7 @@ export interface FileRoutesById {
   '/publications': typeof PublicationsRoute
   '/services': typeof ServicesRoute
   '/why-ssa': typeof WhySsaRoute
+  '/publication/$slug': typeof PublicationSlugRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -91,6 +100,7 @@ export interface FileRouteTypes {
     | '/publications'
     | '/services'
     | '/why-ssa'
+    | '/publication/$slug'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -100,6 +110,7 @@ export interface FileRouteTypes {
     | '/publications'
     | '/services'
     | '/why-ssa'
+    | '/publication/$slug'
   id:
     | '__root__'
     | '/'
@@ -109,6 +120,7 @@ export interface FileRouteTypes {
     | '/publications'
     | '/services'
     | '/why-ssa'
+    | '/publication/$slug'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -119,6 +131,7 @@ export interface RootRouteChildren {
   PublicationsRoute: typeof PublicationsRoute
   ServicesRoute: typeof ServicesRoute
   WhySsaRoute: typeof WhySsaRoute
+  PublicationSlugRoute: typeof PublicationSlugRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -172,6 +185,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/publication/$slug': {
+      id: '/publication/$slug'
+      path: '/publication/$slug'
+      fullPath: '/publication/$slug'
+      preLoaderRoute: typeof PublicationSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -183,6 +203,7 @@ const rootRouteChildren: RootRouteChildren = {
   PublicationsRoute: PublicationsRoute,
   ServicesRoute: ServicesRoute,
   WhySsaRoute: WhySsaRoute,
+  PublicationSlugRoute: PublicationSlugRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

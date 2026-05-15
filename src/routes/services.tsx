@@ -53,7 +53,7 @@ const tabs: {
     key: "advisory",
     label: "Advisory",
     icon: Scale,
-    headline: "Strategic counsel for boards and HR leadership.",
+    headline: "Strategic counsel for Boards and HR leadership.",
     intro:
       "Statutory interpretation, Apex Court judgments and risk-zone opinions — translated into commercial decisions you can act on.",
     bullets: [

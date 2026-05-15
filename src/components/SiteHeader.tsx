@@ -1,7 +1,8 @@
 import { Link } from "@tanstack/react-router";
-import { ArrowRight, Menu, X } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import { useState } from "react";
 import ssaLogo from "../assets/SSA LOGO.png";
+import { BookingDialog } from "./BookingDialog";
 
 type NavLink = {
   to: "/" | "/services" | "/why-ssa" | "/insights" | "/about" | "/publications";
@@ -43,13 +44,17 @@ export function SiteHeader() {
         </nav>
 
         <div className="flex items-center gap-3">
-          <Link
-            to="/"
-            hash="contact"
-            className="hidden sm:inline-flex items-center gap-1.5 text-[15px] font-normal text-paper bg-ink px-5 py-2.5 rounded-full hover:bg-accent-blue transition"
-          >
-            Contact <ArrowRight className="h-4 w-4" />
-          </Link>
+          <BookingDialog
+            trigger={(openDialog) => (
+              <button
+                type="button"
+                onClick={openDialog}
+                className="hidden sm:inline-flex items-center gap-1.5 text-[15px] font-normal text-paper bg-ink px-5 py-2.5 rounded-full hover:bg-accent-blue transition"
+              >
+                Book a Consultation
+              </button>
+            )}
+          />
           <button
             type="button"
             onClick={() => setOpen((v) => !v)}
@@ -76,14 +81,20 @@ export function SiteHeader() {
                 {l.label}
               </Link>
             ))}
-            <Link
-              to="/"
-              hash="contact"
-              onClick={() => setOpen(false)}
-              className="inline-flex w-fit items-center gap-1.5 text-[15px] text-paper bg-ink px-5 py-2.5 rounded-full"
-            >
-              Contact <ArrowRight className="h-4 w-4" />
-            </Link>
+            <BookingDialog
+              trigger={(openDialog) => (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setOpen(false);
+                    openDialog();
+                  }}
+                  className="inline-flex w-fit items-center gap-1.5 text-[15px] text-paper bg-ink px-5 py-2.5 rounded-full"
+                >
+                  Book a Consultation
+                </button>
+              )}
+            />
           </nav>
         </div>
       )}

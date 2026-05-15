@@ -87,7 +87,7 @@ const advantages = [
   {
     icon: Lightbulb,
     title: "Expert Interpretation",
-    desc: "25+ years interpreting statutes, Apex Court judgments and the four new Labour Codes for boards and HR leaders.",
+    desc: "25+ years interpreting statutes, Apex Court judgments and the four new Labour Codes for Boards and HR leaders.",
   },
   {
     icon: Gauge,
@@ -141,7 +141,7 @@ function WhySSAPage() {
             transition={{ duration: 0.8, delay: 0.3 }}
             className="mt-10 text-lg md:text-xl text-muted-ink max-w-2xl leading-relaxed font-light"
           >
-            Three reasons boards and CHROs choose SSA — and a clear-eyed view of what non-compliance actually costs.
+            Three reasons Boards and CHROs choose SSA — and a clear-eyed view of what non-compliance actually costs.
           </motion.p>
         </div>
       </section>

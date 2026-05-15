@@ -253,7 +253,7 @@ function Home() {
           <div className="max-w-4xl mb-20 md:mb-28">
             <div className="eyebrow mb-6">The challenge</div>
             <h2 className="font-display text-4xl md:text-6xl tracking-tight leading-[1.05]">
-              Compliance is now a <span className="text-accent-blue">board-level risk.</span>
+              Compliance is now a <span className="text-accent-blue">Board-level risk.</span>
             </h2>
           </div>
 

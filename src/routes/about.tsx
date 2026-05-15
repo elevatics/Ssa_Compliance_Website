@@ -12,6 +12,10 @@ import {
   ScrollText,
 } from "lucide-react";
 import aboutBg from "@/assets/about-boardroom.jpg";
+import member1 from "@/assets/Member1.png";
+import member2 from "@/assets/Member2.png";
+import member3 from "@/assets/Member3.png";
+import member4 from "@/assets/Member4.png";
 import { SiteHeader } from "@/components/SiteHeader";
 import { BookingDialog } from "@/components/BookingDialog";
 
@@ -22,13 +26,13 @@ export const Route = createFileRoute("/about")({
       {
         name: "description",
         content:
-          "Meet SSA Compliance Services LLP — 25+ years of front-line employment law expertise, led by a senior team of co-founders and an advisory board of CHROs, CFOs and senior counsel.",
+          "Meet SSA Compliance Services LLP — 25+ years of front-line employment law expertise, led by a senior team of co-founders and an advisory Board of CHROs, CFOs and senior counsel.",
       },
       { property: "og:title", content: "About SSA Compliance Services LLP" },
       {
         property: "og:description",
         content:
-          "India's premier employment and labour law advisory. Meet our leadership and advisory board.",
+          "India's premier employment and labour law advisory. Meet our leadership and advisory Board.",
       },
       { property: "og:image", content: aboutBg },
       { name: "twitter:image", content: aboutBg },
@@ -48,26 +52,30 @@ const leadership = [
   {
     name: "Dr. Amitava Ghosh",
     role: "Co-Founder & CEO",
-    bio: "22 years in Employment & Labour Law.",
-    initials: "AG",
+    bio: "22 years of specialized experience in Employee Relations, Employment & Labour Law, Policy formulation and Compliance Audit. Practiced in Employment and Labour Law services.",
+    image: member1,
+    tag: "Employment & Labour Law",
   },
   {
     name: "Swati Jha",
     role: "Co-Founder & COO",
-    bio: "Strategic business & relationship leadership.",
-    initials: "SJ",
+    bio: "Strategic mix of business expertise across industries — strategic planning, execution of sales plans, building relationships and driving organisational growth.",
+    image: member2,
+    tag: "Strategy & Business",
   },
   {
     name: "Supriyo Banerjee",
     role: "Co-Founder & Chief Regulatory Officer",
-    bio: "25+ years in Labour & Employment law.",
-    initials: "SB",
+    bio: "LLB, MBA (HR) with post-graduate diplomas in HR & Labour. 25+ years of hands-on Labour & Employment exposure across corporate and advisory roles.",
+    image: member3,
+    tag: "Regulatory Affairs",
   },
   {
     name: "Ajmal Palliyal",
     role: "Principal Consultant",
-    bio: "11 years as MNC corporate legal counsel.",
-    initials: "AP",
+    bio: "Corporate Legal Counsel with 11 years of MNC experience across IT, Logistics, Retail, Hospitality, Energy and E-commerce sectors.",
+    image: member4,
+    tag: "Corporate Legal",
   },
 ];
 
@@ -206,7 +214,8 @@ function AboutPage() {
             </h2>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+          {/* 2×2 horizontal cards — image left, info right */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
             {leadership.map((p, i) => (
               <motion.div
                 key={p.name}
@@ -214,32 +223,30 @@ function AboutPage() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-60px" }}
                 transition={{ duration: 0.6, delay: i * 0.07 }}
-                className="group relative bg-bone rounded-3xl overflow-hidden hover:bg-ink hover:text-paper transition-colors duration-500"
+                className="group flex bg-paper border border-rule/50 rounded-2xl overflow-hidden hover:border-accent-blue/30 transition-colors duration-300"
               >
-                {/* Avatar surface */}
-                <div className="relative h-64 bg-gradient-to-br from-rule/40 to-bone overflow-hidden">
+                {/* Photo — square container, face centred, branding corner hidden by crop */}
+                <div className="relative w-[160px] shrink-0 overflow-hidden bg-bone">
                   <img
-                    src={`https://i.pravatar.cc/600?img=${(i % 70) + 11}`}
+                    src={p.image}
                     alt={`Portrait of ${p.name}`}
                     loading="lazy"
-                    className="absolute inset-0 h-full w-full object-cover grayscale group-hover:grayscale-0 transition duration-500"
+                    className="absolute inset-0 w-[115%] h-[115%] object-cover object-[40%_18%] grayscale group-hover:grayscale-0 transition-all duration-700"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-br from-accent-blue/20 via-transparent to-accent-orange/20 mix-blend-multiply" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-ink/40 via-transparent to-transparent" />
-                  <div className="absolute bottom-3 left-4 font-display text-2xl text-paper/90 tracking-tight font-extralight drop-shadow">
-                    {p.initials}
-                  </div>
-                  <div className="absolute top-4 right-4 h-2 w-2 rounded-full bg-accent-orange" />
                 </div>
 
-                <div className="p-8">
-                  <div className="text-lg font-normal tracking-tight">{p.name}</div>
-                  <div className="mt-1 text-[13px] text-accent-blue group-hover:text-accent-orange transition font-normal">
-                    {p.role}
+                {/* Info */}
+                <div className="flex flex-col justify-center px-6 py-7 gap-1.5">
+                  <span className="inline-block text-[10px] font-semibold tracking-[0.16em] uppercase text-accent-orange mb-1">
+                    {p.tag}
+                  </span>
+                  <div className="text-[15px] font-semibold tracking-tight text-ink leading-snug">
+                    {p.name}
                   </div>
-                  <div className="mt-4 text-[14px] text-muted-ink group-hover:text-paper/65 transition font-light leading-relaxed">
+                  <div className="text-[12px] text-accent-blue font-normal">{p.role}</div>
+                  <p className="mt-2 text-[12.5px] text-muted-ink font-light leading-relaxed">
                     {p.bio}
-                  </div>
+                  </p>
                 </div>
               </motion.div>
             ))}
