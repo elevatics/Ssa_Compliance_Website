@@ -4,7 +4,7 @@ import { useState } from "react";
 import ssaLogo from "../assets/SSA LOGO.png";
 
 type NavLink = {
-  to: "/" | "/services" | "/products" | "/why-ssa" | "/insights" | "/about" | "/publications";
+  to: "/" | "/services" | "/why-ssa" | "/insights" | "/about" | "/publications";
   label: string;
   exact?: boolean;
 };
@@ -12,7 +12,6 @@ type NavLink = {
 const NAV_LINKS: NavLink[] = [
   { to: "/", label: "Home", exact: true },
   { to: "/services", label: "Services" },
-  { to: "/products", label: "Products" },
   { to: "/why-ssa", label: "Why SSA" },
   { to: "/insights", label: "Insights" },
   { to: "/publications", label: "Publications" },

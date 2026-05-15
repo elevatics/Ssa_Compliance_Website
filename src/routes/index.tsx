@@ -267,16 +267,16 @@ function Home() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, margin: "-60px" }}
                   transition={{ duration: 0.6, delay: i * 0.08 }}
-                  className="bg-paper border border-rule/60 rounded-2xl p-10 min-h-[280px] flex flex-col justify-between hover:border-accent-blue/40 hover:shadow-lg hover:shadow-ink/5 transition"
+                  className="bg-paper border border-rule/60 rounded-2xl px-7 py-10 flex flex-col gap-8 hover:border-accent-blue/40 hover:shadow-lg hover:shadow-ink/5 transition"
                 >
                   <div className="h-11 w-11 rounded-xl bg-accent-blue/10 flex items-center justify-center">
                     <Icon className="h-5 w-5 text-accent-blue stroke-[1.5]" />
                   </div>
                   <div>
-                    <div className="text-lg font-normal leading-snug text-ink">
+                    <div className="text-[14px] font-normal leading-snug text-ink line-clamp-1">
                       {c.title}
                     </div>
-                    <div className="mt-3 text-[14px] text-muted-ink leading-relaxed font-light">
+                    <div className="mt-2 text-[13px] text-muted-ink leading-snug font-light line-clamp-1">
                       {c.impact}
                     </div>
                   </div>
