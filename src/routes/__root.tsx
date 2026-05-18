@@ -1,4 +1,6 @@
 import { Outlet, Link, createRootRoute } from "@tanstack/react-router";
+import { Chatbot } from "@/components/Chatbot";
+import { SubscriptionPopup } from "@/components/SubscriptionPopup";
 
 function NotFoundComponent() {
   return (
@@ -28,5 +30,11 @@ export const Route = createRootRoute({
 });
 
 function RootComponent() {
-  return <Outlet />;
+  return (
+    <>
+      <Outlet />
+      <Chatbot />
+      <SubscriptionPopup />
+    </>
+  );
 }

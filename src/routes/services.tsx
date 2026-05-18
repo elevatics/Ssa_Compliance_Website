@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { SiteFooter } from "@/components/SiteFooter";
 import { motion, AnimatePresence } from "framer-motion";
-import { useState } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import {
   ArrowRight,
   Scale,
@@ -15,6 +15,8 @@ import {
   Gavel,
   RefreshCw,
   Check,
+  ChevronLeft,
+  ChevronRight,
 } from "lucide-react";
 import { SiteHeader } from "@/components/SiteHeader";
 import { BookingDialog } from "@/components/BookingDialog";
@@ -123,6 +125,35 @@ const capabilityTimeline = [
 function ServicesPage() {
   const [active, setActive] = useState<TabKey>("advisory");
   const current = tabs.find((t) => t.key === active)!;
+
+  // Carousel state
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const [canScrollLeft, setCanScrollLeft] = useState(false);
+  const [canScrollRight, setCanScrollRight] = useState(true);
+
+  const updateArrows = useCallback(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+    setCanScrollLeft(el.scrollLeft > 4);
+    setCanScrollRight(el.scrollLeft < el.scrollWidth - el.clientWidth - 4);
+  }, []);
+
+  useEffect(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+    updateArrows();
+    el.addEventListener("scroll", updateArrows, { passive: true });
+    const ro = new ResizeObserver(updateArrows);
+    ro.observe(el);
+    return () => { el.removeEventListener("scroll", updateArrows); ro.disconnect(); };
+  }, [updateArrows]);
+
+  function scrollPrev() {
+    scrollRef.current?.scrollBy({ left: -320, behavior: "smooth" });
+  }
+  function scrollNext() {
+    scrollRef.current?.scrollBy({ left: 320, behavior: "smooth" });
+  };
 
   return (
     <div className="bg-paper text-ink antialiased font-sans">
@@ -259,50 +290,82 @@ function ServicesPage() {
         </div>
       </section>
 
-      {/* CAPABILITIES TIMELINE */}
+      {/* CAPABILITIES TIMELINE — arrow carousel */}
       <section className="bg-ink text-paper">
-        <div className="mx-auto max-w-7xl px-6 lg:px-12 py-32 md:py-44">
-          <div className="max-w-4xl mb-20 md:mb-24">
-            <div className="eyebrow mb-6">What we deliver</div>
-            <h2 className="font-display text-4xl md:text-6xl tracking-tight leading-[1.05] font-light">
-              From first opinion to
-              <span className="block text-accent-orange">ongoing assurance.</span>
-            </h2>
+        <div className="mx-auto max-w-7xl px-6 lg:px-12 pt-32 md:pt-44 pb-20 md:pb-32">
+
+          {/* Header row with arrow buttons */}
+          <div className="flex items-end justify-between gap-6 mb-12 md:mb-16">
+            <div className="max-w-2xl">
+              <div className="eyebrow mb-5">What we deliver</div>
+              <h2 className="font-display text-4xl md:text-6xl tracking-tight leading-[1.05] font-light">
+                From first opinion to
+                <span className="block text-accent-orange">ongoing assurance.</span>
+              </h2>
+            </div>
+
+            {/* Arrow controls */}
+            <div className="flex items-center gap-2 shrink-0 pb-1">
+              <button
+                type="button"
+                onClick={scrollPrev}
+                disabled={!canScrollLeft}
+                aria-label="Previous"
+                className="h-11 w-11 rounded-full border border-paper/20 flex items-center justify-center text-paper transition hover:bg-paper/10 disabled:opacity-25 disabled:cursor-not-allowed"
+              >
+                <ChevronLeft className="h-5 w-5" />
+              </button>
+              <button
+                type="button"
+                onClick={scrollNext}
+                disabled={!canScrollRight}
+                aria-label="Next"
+                className="h-11 w-11 rounded-full border border-paper/20 flex items-center justify-center text-paper transition hover:bg-paper/10 disabled:opacity-25 disabled:cursor-not-allowed"
+              >
+                <ChevronRight className="h-5 w-5" />
+              </button>
+            </div>
           </div>
 
-          {/* Timeline */}
+          {/* Card track */}
           <div className="relative">
-            {/* horizontal connector */}
-            <div className="hidden lg:block absolute top-7 left-0 right-0 h-px bg-paper/15" />
-            <div className="hidden lg:block absolute top-7 left-0 h-px bg-gradient-to-r from-accent-blue via-accent-orange to-accent-blue" style={{ width: "100%" }} />
+            {/* Right fade hint */}
+            <div className="pointer-events-none absolute right-0 top-0 bottom-0 w-16 bg-gradient-to-l from-ink to-transparent z-10" />
 
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8 lg:gap-4">
-              {capabilityTimeline.map((step, i) => {
-                const Icon = step.icon;
-                return (
-                  <motion.div
-                    key={step.label}
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true, margin: "-60px" }}
-                    transition={{ duration: 0.5, delay: i * 0.08 }}
-                    className="relative flex flex-col items-start"
-                  >
-                    <div className="relative z-10 h-14 w-14 rounded-2xl bg-paper text-ink flex items-center justify-center mb-5">
-                      <Icon className="h-5 w-5 stroke-[1.5]" />
-                    </div>
-                    <div className="text-[11px] font-mono text-accent-orange tracking-widest mb-2">
-                      0{i + 1}
-                    </div>
-                    <div className="text-base font-normal text-paper">
-                      {step.label}
-                    </div>
-                    <div className="mt-2 text-[13px] text-paper/60 font-light leading-relaxed">
-                      {step.desc}
-                    </div>
-                  </motion.div>
-                );
-              })}
+            <div
+              ref={scrollRef}
+              className="overflow-x-auto no-scrollbar"
+            >
+              <div className="flex gap-4 w-max">
+                {capabilityTimeline.map((step, i) => {
+                  const Icon = step.icon;
+                  return (
+                    <motion.div
+                      key={step.label}
+                      initial={{ opacity: 0, y: 16 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true, margin: "-40px" }}
+                      transition={{ duration: 0.45, delay: i * 0.06 }}
+                      className="group relative w-64 md:w-72 shrink-0 rounded-3xl border border-paper/10 bg-paper/5 hover:bg-paper/10 transition-colors p-7 flex flex-col"
+                    >
+                      <div className="absolute top-0 left-7 right-7 h-px bg-gradient-to-r from-accent-blue/50 to-accent-orange/50" />
+
+                      <div className="h-12 w-12 rounded-2xl bg-paper/10 group-hover:bg-paper/20 transition flex items-center justify-center mb-5">
+                        <Icon className="h-5 w-5 stroke-[1.5] text-paper" />
+                      </div>
+                      <div className="text-[10px] font-mono text-accent-orange tracking-[0.18em] mb-3">
+                        0{i + 1}
+                      </div>
+                      <div className="text-[16px] font-normal text-paper leading-snug mb-2">
+                        {step.label}
+                      </div>
+                      <div className="mt-auto pt-3 text-[13px] text-paper/55 font-light leading-relaxed">
+                        {step.desc}
+                      </div>
+                    </motion.div>
+                  );
+                })}
+              </div>
             </div>
           </div>
         </div>
