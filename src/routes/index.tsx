@@ -15,6 +15,10 @@ import { CounterStat } from "@/components/CounterStat";
 import { SiteHeader } from "@/components/SiteHeader";
 import { BookingDialog } from "@/components/BookingDialog";
 import heroBg from "@/assets/hero-corporate.jpg";
+import imgEmployment from "@/assets/employment law advisory.png";
+import imgPanIndia from "@/assets/pan india.png";
+import imgStatutory from "@/assets/Statutory Records & Filings.png";
+import imgPosh from "@/assets/posh.png";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -82,24 +86,28 @@ const services = [
     title: "Employment Law Advisory",
     desc: "Statutory interpretation, contracts and risk mitigation for boards and HR leadership.",
     tone: "blue" as const,
+    img: imgEmployment,
   },
   {
     icon: ClipboardList,
     title: "Pan-India Compliance Audits",
     desc: "Forensic review of core operations and contractor ecosystems across every state.",
     tone: "orange" as const,
+    img: imgPanIndia,
   },
   {
     icon: FolderOpen,
     title: "Statutory Records & Filings",
     desc: "End-to-end implementation of registers, returns and periodic regulatory filings.",
     tone: "blue" as const,
+    img: imgStatutory,
   },
   {
     icon: ShieldCheck,
     title: "POSH Compliance",
     desc: "Policy, mandatory training and confidential investigation by certified specialists.",
     tone: "orange" as const,
+    img: imgPosh,
   },
 ];
 
@@ -193,41 +201,64 @@ function Home() {
               </motion.p>
             </div>
 
-            {/* RIGHT — 2x2 stat cards */}
-            <div className="grid grid-cols-2 gap-4 md:gap-5">
-              {[
-                {
-                  value: "250+",
-                  label: "Acts and labour law obligations across complex regulatory environments.",
-                },
-                {
-                  value: "1500+",
-                  label: "Compliance checkpoints, records, filings, and ongoing obligations to manage.",
-                },
-                {
-                  value: "25+",
-                  label: "Years of senior experience in employment and labour law advisory.",
-                },
-                {
-                  value: "Pan-India",
-                  label: "Coverage across multi-location business operations, contractors, and establishments.",
-                },
-              ].map((stat, i) => (
-                <motion.div
-                  key={stat.value}
-                  initial={{ opacity: 0, y: 24 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: 0.2 + i * 0.1 }}
-                  className="bg-paper/5 backdrop-blur-sm border border-paper/10 rounded-2xl p-6 md:p-8 hover:border-accent-blue/50 hover:bg-paper/10 transition"
-                >
-                  <div className="font-display text-3xl md:text-4xl lg:text-5xl tracking-tight text-paper leading-none">
-                    {stat.value}
-                  </div>
-                  <p className="mt-4 text-[14px] md:text-[15px] text-paper/65 leading-relaxed font-light">
-                    {stat.label}
-                  </p>
-                </motion.div>
-              ))}
+            {/* RIGHT — 2x2 stat cards (staggered floating columns) */}
+            <div className="flex gap-4 md:gap-5">
+              {/* Left column */}
+              <div className="flex flex-col gap-4 md:gap-5 flex-1">
+                {[
+                  {
+                    value: "250+",
+                    label: "Acts and labour law obligations across complex regulatory environments.",
+                  },
+                  {
+                    value: "25+",
+                    label: "Years of senior experience in employment and labour law advisory.",
+                  },
+                ].map((stat, i) => (
+                  <motion.div
+                    key={stat.value}
+                    initial={{ opacity: 0, y: 24 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.6, delay: 0.2 + i * 0.1 }}
+                    className="bg-paper/8 backdrop-blur-sm border border-paper/12 rounded-2xl p-6 md:p-8 shadow-2xl shadow-black/30 hover:border-accent-blue/50 hover:bg-paper/12 hover:-translate-y-1 transition-all duration-300"
+                  >
+                    <div className="font-display text-3xl md:text-4xl lg:text-5xl tracking-tight text-paper leading-none">
+                      {stat.value}
+                    </div>
+                    <p className="mt-4 text-[14px] md:text-[15px] text-paper/65 leading-relaxed font-light">
+                      {stat.label}
+                    </p>
+                  </motion.div>
+                ))}
+              </div>
+              {/* Right column — offset downward for staggered float effect */}
+              <div className="flex flex-col gap-4 md:gap-5 flex-1 mt-10 md:mt-14">
+                {[
+                  {
+                    value: "1500+",
+                    label: "Compliance checkpoints, records, filings, and ongoing obligations to manage.",
+                  },
+                  {
+                    value: "Pan-India",
+                    label: "Coverage across multi-location business operations, contractors, and establishments.",
+                  },
+                ].map((stat, i) => (
+                  <motion.div
+                    key={stat.value}
+                    initial={{ opacity: 0, y: 24 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.6, delay: 0.3 + i * 0.1 }}
+                    className="bg-paper/8 backdrop-blur-sm border border-paper/12 rounded-2xl p-6 md:p-8 shadow-2xl shadow-black/30 hover:border-accent-blue/50 hover:bg-paper/12 hover:-translate-y-1 transition-all duration-300"
+                  >
+                    <div className="font-display text-3xl md:text-4xl lg:text-5xl tracking-tight text-paper leading-none">
+                      {stat.value}
+                    </div>
+                    <p className="mt-4 text-[14px] md:text-[15px] text-paper/65 leading-relaxed font-light">
+                      {stat.label}
+                    </p>
+                  </motion.div>
+                ))}
+              </div>
             </div>
           </div>
 
@@ -248,35 +279,36 @@ function Home() {
       </section>
 
       {/* CHALLENGE */}
-      <section id="challenge" className="bg-bone">
-        <div className="mx-auto max-w-7xl px-6 lg:px-12 py-32 md:py-44">
-          <div className="max-w-4xl mb-20 md:mb-28">
-            <div className="eyebrow mb-6">The challenge</div>
-            <h2 className="font-display text-4xl md:text-6xl tracking-tight leading-[1.05]">
-              Compliance is now a <span className="text-accent-blue">Board-level risk.</span>
+      <section id="challenge" className="bg-paper">
+        <div className="mx-auto max-w-7xl px-6 lg:px-12 py-24 md:py-36">
+          <div className="max-w-3xl mx-auto text-center mb-16 md:mb-20">
+            <div className="eyebrow mb-5">The challenge</div>
+            <h2 className="font-display text-4xl md:text-5xl tracking-tight leading-[1.05]">
+              Compliance is now a{" "}
+              <span className="text-accent-blue">Board-level risk.</span>
             </h2>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 divide-y sm:divide-y-0 sm:divide-x divide-rule/50">
             {challenges.map((c, i) => {
               const Icon = c.icon;
               return (
                 <motion.div
                   key={c.title}
-                  initial={{ opacity: 0, y: 24 }}
+                  initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, margin: "-60px" }}
-                  transition={{ duration: 0.6, delay: i * 0.08 }}
-                  className="bg-paper border border-rule/60 rounded-2xl px-7 py-10 flex flex-col gap-8 hover:border-accent-blue/40 hover:shadow-lg hover:shadow-ink/5 transition"
+                  transition={{ duration: 0.5, delay: i * 0.08 }}
+                  className="flex flex-col items-center text-center px-8 py-10 gap-5 group"
                 >
-                  <div className="h-11 w-11 rounded-xl bg-accent-blue/10 flex items-center justify-center">
-                    <Icon className="h-5 w-5 text-accent-blue stroke-[1.5]" />
+                  <div className="h-12 w-12 rounded-full bg-ink/5 flex items-center justify-center group-hover:bg-accent-blue/10 transition">
+                    <Icon className="h-5 w-5 text-ink/50 group-hover:text-accent-blue stroke-[1.5] transition" />
                   </div>
                   <div>
-                    <div className="text-[14px] font-normal leading-snug text-ink line-clamp-1">
+                    <div className="text-[15px] font-medium leading-snug text-ink">
                       {c.title}
                     </div>
-                    <div className="mt-2 text-[13px] text-muted-ink leading-snug font-light line-clamp-1">
+                    <div className="mt-2 text-[13px] text-muted-ink leading-relaxed font-light">
                       {c.impact}
                     </div>
                   </div>
@@ -288,53 +320,49 @@ function Home() {
       </section>
 
       {/* SERVICES */}
-      <section id="services">
-        <div className="mx-auto max-w-7xl px-6 lg:px-12 py-32 md:py-44">
-          <div className="max-w-4xl mb-20 md:mb-28">
-            <div className="eyebrow mb-6">What we deliver</div>
-            <h2 className="font-display text-4xl md:text-6xl tracking-tight leading-[1.05]">
+      <section id="services" className="bg-bone">
+        <div className="mx-auto max-w-7xl px-6 lg:px-12 pt-24 md:pt-36 pb-0">
+          <div className="max-w-3xl mx-auto text-center mb-14 md:mb-18">
+            <div className="eyebrow mb-5">What we deliver</div>
+            <h2 className="font-display text-4xl md:text-5xl tracking-tight leading-[1.05]">
               Four practices.
               <span className="block text-muted-ink">One unbroken standard.</span>
             </h2>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-5">
-            {services.map((s, i) => {
-              const Icon = s.icon;
-              const isBlue = s.tone === "blue";
-              return (
-                <motion.div
-                  key={s.title}
-                  initial={{ opacity: 0, y: 24 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, margin: "-60px" }}
-                  transition={{ duration: 0.6, delay: i * 0.08 }}
-                  className="group relative bg-bone rounded-3xl p-12 min-h-[340px] flex flex-col justify-between overflow-hidden hover:bg-ink hover:text-paper transition-colors duration-500"
-                >
-                  <div
-                    className={`h-12 w-12 rounded-xl flex items-center justify-center transition ${
-                      isBlue
-                        ? "bg-accent-blue/10 group-hover:bg-accent-blue"
-                        : "bg-accent-orange/10 group-hover:bg-accent-orange"
-                    }`}
-                  >
-                    <Icon
-                      className={`h-5 w-5 stroke-[1.5] transition ${
-                        isBlue ? "text-accent-blue" : "text-accent-orange"
-                      } group-hover:text-paper`}
-                    />
-                  </div>
-                  <div>
-                    <h3 className="font-display text-3xl tracking-tight font-light">
-                      {s.title}
-                    </h3>
-                    <p className="mt-4 text-[16px] text-muted-ink group-hover:text-paper/65 transition leading-relaxed max-w-md font-light">
-                      {s.desc}
-                    </p>
-                  </div>
-                </motion.div>
-              );
-            })}
+          {/* Photo cards — 4 columns */}
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4 pb-24 md:pb-36">
+            {services.map((s, i) => (
+              <motion.div
+                key={s.title}
+                initial={{ opacity: 0, y: 24 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-60px" }}
+                transition={{ duration: 0.6, delay: i * 0.08 }}
+                className="group relative rounded-2xl overflow-hidden aspect-[3/4] cursor-pointer"
+              >
+                {/* Photo — blurs on hover */}
+                <img
+                  src={s.img}
+                  alt={s.title}
+                  className="absolute inset-0 h-full w-full object-cover transition duration-500 group-hover:scale-105 group-hover:[filter:blur(3px)]"
+                />
+                {/* Base dark overlay — deepens on hover */}
+                <div className="absolute inset-0 bg-ink/30 group-hover:bg-ink/60 transition-colors duration-500" />
+                {/* Title — top */}
+                <div className="absolute top-0 left-0 right-0 p-5 md:p-6">
+                  <h3 className="font-display text-[15px] md:text-lg lg:text-xl tracking-tight text-paper leading-snug font-light drop-shadow-sm">
+                    {s.title}
+                  </h3>
+                </div>
+                {/* Description — bottom, slides up on hover */}
+                <div className="absolute bottom-0 left-0 right-0 p-5 md:p-6 translate-y-3 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-400">
+                  <p className="text-[12px] md:text-[13px] text-paper/80 leading-relaxed font-light">
+                    {s.desc}
+                  </p>
+                </div>
+              </motion.div>
+            ))}
           </div>
         </div>
       </section>
