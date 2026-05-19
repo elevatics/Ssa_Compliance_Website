@@ -2,7 +2,7 @@ import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { SiteFooter } from "@/components/SiteFooter";
 import { motion } from "framer-motion";
 import { SiteHeader } from "@/components/SiteHeader";
-import { ArrowLeft, Clock, ExternalLink, User } from "lucide-react";
+import { ArrowLeft, ExternalLink, User } from "lucide-react";
 import { books } from "./publications";
 import { useState } from "react";
 
@@ -66,15 +66,13 @@ function PublicationDetailPage() {
           <h1 className="font-display text-[clamp(2rem,5vw,3.25rem)] leading-[1.1] tracking-tight text-balance mb-6">
             {book.title}
           </h1>
-          <motion.div className="flex flex-wrap items-center justify-center gap-6 text-[13px] text-muted-ink">
-            <span className="inline-flex items-center gap-1.5">
-              <User className="h-3.5 w-3.5" />
-              {book.author}
-            </span>
-            <span className="inline-flex items-center gap-1.5">
-              <Clock className="h-3.5 w-3.5" />
-              {book.date.replace(/^Published\s*/i, "")}
-            </span>
+          <motion.div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-[13px] text-muted-ink">
+            {book.author.split(/\s*&\s*/).map((name) => (
+              <span key={name} className="inline-flex items-center gap-1.5">
+                <User className="h-3.5 w-3.5 shrink-0" />
+                {name.trim()}
+              </span>
+            ))}
           </motion.div>
         </motion.header>
 
