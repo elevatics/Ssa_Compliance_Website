@@ -208,4 +208,12 @@
 
   .no-scrollbar { scrollbar-width: none; -ms-overflow-style: none; }
   .no-scrollbar::-webkit-scrollbar { display: none; width: 0; height: 0; }
+
+  /* Publications — book cover image containers */
+  .publication-cover-featured {
+    background-color: oklch(0.97 0.04 95);
+  }
+  .publication-cover-thumb {
+    background-color: oklch(0.94 0 0);
+  }
 }

@@ -1,10 +1,10 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { SiteFooter } from "@/components/SiteFooter";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { SiteHeader } from "@/components/SiteHeader";
 import { BookingDialog } from "@/components/BookingDialog";
 import { ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 // Order: image.png → image (1).png → image (2).png … image (5).png
 import img0 from "@/assets/image.png";
@@ -172,55 +172,101 @@ It is, hence, crucial and critical for everyone whether be an owner, entrepreneu
 
 const ITEMS_PER_PAGE = 3;
 
-function BookCard({ book, index }: { book: (typeof books)[0]; index: number }) {
+function BookRow({
+  book,
+  isActive,
+  onSelect,
+}: {
+  book: (typeof books)[0];
+  isActive: boolean;
+  onSelect: () => void;
+}) {
   return (
-    <motion.article
-      initial={{ opacity: 0, y: 28 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-60px" }}
-      transition={{ duration: 0.55, delay: index * 0.05 }}
-      className="group bg-paper border border-rule/60 rounded-2xl overflow-hidden hover:border-accent-blue/30 hover:shadow-lg hover:shadow-ink/6 transition-all duration-300 flex flex-col sm:flex-row"
-    >
-      {/* Text side */}
-      <div className="flex-1 px-8 py-8 flex flex-col justify-between order-2 sm:order-1 min-w-0">
-        <div>
-          <h2 className="font-display text-[1.2rem] font-normal tracking-tight leading-snug text-ink mb-2 group-hover:text-accent-blue transition-colors duration-300">
-            {book.title}
-          </h2>
-          <p className="text-[12px] text-accent-blue font-normal mb-3">{book.author}</p>
-          <p className="text-[13px] text-muted-ink font-light leading-relaxed line-clamp-3">
-            {book.excerpt}
-          </p>
-        </div>
-        <div className="mt-6">
-          <Link
-            to="/publication/$slug"
-            params={{ slug: book.slug }}
-            className="inline-flex items-center gap-1.5 text-[13px] font-normal text-accent-blue hover:text-accent-orange transition-colors duration-200"
-          >
-            Read More <ArrowRight className="h-3.5 w-3.5" />
-          </Link>
-        </div>
-      </div>
+    <div className="border-b border-rule/70 last:border-b-0">
+      <button
+        type="button"
+        onClick={onSelect}
+        className={`w-full text-left transition-colors duration-200 ${
+          isActive ? "bg-paper" : "bg-transparent hover:bg-bone/50"
+        }`}
+        aria-expanded={isActive}
+        aria-current={isActive ? "true" : undefined}
+      >
+        <AnimatePresence mode="wait" initial={false}>
+          {isActive ? (
+            <motion.div
+              key="expanded"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.25 }}
+              className="grid md:grid-cols-[2fr_3fr] gap-0"
+            >
+              {/* Text — ~40% */}
+              <motion.div className="flex flex-col justify-center px-0 py-8 md:py-10 md:pr-10">
+                <h2 className="font-display text-[1.35rem] md:text-[1.5rem] font-normal tracking-tight leading-snug text-ink underline decoration-ink/30 underline-offset-4 mb-4">
+                  {book.title}
+                </h2>
+                <p className="text-[14px] text-muted-ink font-light leading-relaxed mb-6">
+                  {book.excerpt}
+                </p>
+                <Link
+                  to="/publication/$slug"
+                  params={{ slug: book.slug }}
+                  onClick={(e) => e.stopPropagation()}
+                  className="inline-flex items-center gap-1.5 text-[14px] font-normal text-ink hover:text-accent-blue transition-colors duration-200 w-fit"
+                >
+                  Read More <ArrowRight className="h-3.5 w-3.5" />
+                </Link>
+              </motion.div>
 
-      {/* Image side — fills the panel edge-to-edge, no visible background gap */}
-      <div className="w-full sm:w-52 shrink-0 overflow-hidden order-1 sm:order-2 min-h-[180px] sm:min-h-0">
-        <img
-          src={book.image}
-          alt={book.title}
-          className="h-full w-full object-cover group-hover:scale-[1.04] transition-transform duration-500"
-          style={{ minHeight: "180px" }}
-        />
-      </div>
-    </motion.article>
+              {/* Featured cover — ~60%, cream background */}
+              <div className="publication-cover-featured flex items-center justify-center min-h-[240px] md:min-h-[300px] p-6 md:p-10">
+                <img
+                  src={book.image}
+                  alt={book.title}
+                  className="max-h-[220px] md:max-h-[280px] w-auto object-contain drop-shadow-lg"
+                />
+              </div>
+            </motion.div>
+          ) : (
+            <motion.div
+              key="collapsed"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.2 }}
+              className="flex items-center justify-between gap-6 py-5 md:py-6"
+            >
+              <h3 className="font-display text-[1.05rem] md:text-[1.15rem] font-normal tracking-tight text-ink/85 pr-4">
+                {book.title}
+              </h3>
+              <motion.div className="publication-cover-thumb shrink-0 w-[72px] h-[88px] md:w-[80px] md:h-[96px] flex items-center justify-center p-2">
+                <img
+                  src={book.image}
+                  alt=""
+                  className="max-h-full max-w-full object-contain"
+                />
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </button>
+    </div>
   );
 }
 
 function PublicationsPage() {
   const [page, setPage] = useState(0);
+  const [activeSlug, setActiveSlug] = useState(books[0].slug);
 
   const totalPages = Math.ceil(books.length / ITEMS_PER_PAGE);
   const visibleBooks = books.slice(page * ITEMS_PER_PAGE, page * ITEMS_PER_PAGE + ITEMS_PER_PAGE);
+
+  useEffect(() => {
+    const firstOnPage = books[page * ITEMS_PER_PAGE];
+    if (firstOnPage) setActiveSlug(firstOnPage.slug);
+  }, [page]);
 
   return (
     <div className="bg-paper text-ink antialiased font-sans">
@@ -258,56 +304,69 @@ function PublicationsPage() {
         </div>
       </section>
 
-      {/* BOOKS LIST */}
-      <section className="bg-bone">
-        <div className="mx-auto max-w-4xl px-6 lg:px-12 py-16 md:py-24">
-          <div className="space-y-5">
-            {visibleBooks.map((book, i) => (
-              <BookCard key={book.slug} book={book} index={i} />
+      {/* BOOKS LIST — accordion master-detail */}
+      <section className="bg-paper border-t border-rule/40">
+        <motion.div className="mx-auto max-w-4xl px-6 lg:px-12 py-16 md:py-24">
+          <div>
+            {visibleBooks.map((book) => (
+              <BookRow
+                key={book.slug}
+                book={book}
+                isActive={activeSlug === book.slug}
+                onSelect={() => setActiveSlug(book.slug)}
+              />
             ))}
           </div>
 
           {/* Pagination */}
           {totalPages > 1 && (
-            <div className="mt-14 flex items-center justify-center gap-4">
+            <div className="mt-14 flex items-center justify-center gap-6">
               <button
                 type="button"
                 onClick={() => setPage((p) => Math.max(0, p - 1))}
                 disabled={page === 0}
-                className="h-9 w-9 rounded-full border border-rule/60 flex items-center justify-center text-muted-ink hover:border-accent-blue hover:text-accent-blue disabled:opacity-30 disabled:cursor-not-allowed transition"
+                className="text-muted-ink hover:text-ink disabled:opacity-30 disabled:cursor-not-allowed transition"
+                aria-label="Previous page"
               >
-                <ChevronLeft className="h-4 w-4" />
+                <ChevronLeft className="h-5 w-5" />
               </button>
 
-              {Array.from({ length: totalPages }).map((_, i) => (
-                <button
-                  key={i}
-                  type="button"
-                  onClick={() => setPage(i)}
-                  className={`h-2.5 w-2.5 rounded-full transition-all duration-200 ${
-                    i === page ? "bg-accent-blue scale-125" : "bg-rule hover:bg-accent-blue/40"
-                  }`}
-                />
-              ))}
+              <div className="flex items-center gap-4">
+                {Array.from({ length: totalPages }).map((_, i) => (
+                  <button
+                    key={i}
+                    type="button"
+                    onClick={() => setPage(i)}
+                    className={`text-[15px] transition-colors ${
+                      i === page
+                        ? "font-medium text-ink"
+                        : "text-muted-ink hover:text-ink"
+                    }`}
+                  >
+                    {i + 1}
+                  </button>
+                ))}
+              </div>
 
               <button
                 type="button"
                 onClick={() => setPage((p) => Math.min(totalPages - 1, p + 1))}
                 disabled={page === totalPages - 1}
-                className="h-9 w-9 rounded-full border border-rule/60 flex items-center justify-center text-muted-ink hover:border-accent-blue hover:text-accent-blue disabled:opacity-30 disabled:cursor-not-allowed transition"
+                className="text-muted-ink hover:text-ink disabled:opacity-30 disabled:cursor-not-allowed transition"
+                aria-label="Next page"
               >
-                <ChevronRight className="h-4 w-4" />
+                <ChevronRight className="h-5 w-5" />
               </button>
             </div>
           )}
-        </div>
+        </motion.div>
       </section>
 
       {/* CTA */}
       <section className="relative overflow-hidden bg-ink text-paper">
-        <div className="absolute -top-40 -right-40 h-[500px] w-[500px] rounded-full bg-accent-blue/20 blur-3xl" />
-        <div className="absolute -bottom-40 -left-40 h-[500px] w-[500px] rounded-full bg-accent-orange/20 blur-3xl" />
-        <div className="relative mx-auto max-w-5xl px-6 lg:px-12 py-32 md:py-40 text-center">
+        <motion.div className="absolute -top-40 -right-40 h-[500px] w-[500px] rounded-full bg-accent-blue/20 blur-3xl" />
+        <motion.div className="absolute -bottom-40 -left-40 h-[500px] w-[500px] rounded-full bg-accent-orange/20 blur-3xl" />
+        <motion.div className="relative mx-auto max-w-5xl px-6 lg:px-12 py-32 md:py-40 text-center">
           <div className="eyebrow mb-8">Engage</div>
           <h2 className="font-display text-4xl md:text-7xl tracking-tight leading-[1.05] font-light">
             Need a deeper brief
@@ -332,7 +391,7 @@ function PublicationsPage() {
               Explore insights <ArrowRight className="h-4 w-4" />
             </Link>
           </div>
-        </div>
+        </motion.div>
       </section>
 
       <SiteFooter />
