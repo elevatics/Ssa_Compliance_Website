@@ -179,13 +179,8 @@ function ProductsPage() {
                     featured ? "sm:col-span-2 lg:col-span-2" : ""
                   }`}
                 >
-                  <div className="flex items-start justify-between">
-                    <div className="h-12 w-12 rounded-xl bg-accent-blue/10 flex items-center justify-center group-hover:bg-accent-blue transition-colors duration-300">
-                      <Icon className="h-5 w-5 text-accent-blue group-hover:text-paper stroke-[1.5] transition-colors duration-300" />
-                    </div>
-                    <span className="text-[11px] font-mono text-accent-orange tracking-widest">
-                      0{i + 1}
-                    </span>
+                  <div className="h-12 w-12 rounded-xl bg-accent-blue/10 flex items-center justify-center group-hover:bg-accent-blue transition-colors duration-300">
+                    <Icon className="h-5 w-5 text-accent-blue group-hover:text-paper stroke-[1.5] transition-colors duration-300" />
                   </div>
                   <div className="mt-10">
                     <div className="text-lg md:text-xl font-normal tracking-tight leading-snug">

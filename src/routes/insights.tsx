@@ -138,13 +138,8 @@ function InsightsPage() {
                   transition={{ duration: 0.5, delay: i * 0.06 }}
                   className="group bg-ink p-10 md:p-12 min-h-[240px] flex flex-col justify-between hover:bg-paper/[0.04] transition-colors duration-300"
                 >
-                  <div className="flex items-start justify-between">
-                    <div className="h-12 w-12 rounded-xl bg-accent-blue/15 flex items-center justify-center group-hover:bg-accent-blue transition-colors duration-300">
-                      <Icon className="h-5 w-5 text-accent-blue group-hover:text-paper stroke-[1.5] transition-colors duration-300" />
-                    </div>
-                    <span className="text-[11px] font-mono text-accent-orange tracking-widest">
-                      {c.num}
-                    </span>
+                  <div className="h-12 w-12 rounded-xl bg-accent-blue/15 flex items-center justify-center group-hover:bg-accent-blue transition-colors duration-300">
+                    <Icon className="h-5 w-5 text-accent-blue group-hover:text-paper stroke-[1.5] transition-colors duration-300" />
                   </div>
                   <div className="mt-12 text-lg font-normal tracking-tight leading-snug max-w-[18ch] text-paper">
                     {c.label}

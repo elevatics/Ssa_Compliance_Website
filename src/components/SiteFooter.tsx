@@ -1,6 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { Phone, Mail, Globe, Linkedin } from "lucide-react";
-import ssaLogo from "../assets/SSA LOGO.png";
+import ssaLogoDark from "../assets/SSA LOGO-dark.png";
 
 const NAV_COL1 = [
   { label: "Home", to: "/" as const },
@@ -23,7 +23,7 @@ export function SiteFooter() {
 
           {/* Column 1 — Logo */}
           <div className="flex flex-col items-start">
-            <img src={ssaLogo} alt="SSA Compliance Services LLP" className="h-20 w-auto" />
+            <img src={ssaLogoDark} alt="SSA Compliance Services LLP" className="h-20 w-auto" />
           </div>
 
           {/* Column 2 — Navigation */}

@@ -172,9 +172,6 @@ function WhySSAPage() {
                     <Icon className="h-7 w-7 text-accent-blue stroke-[1.5]" />
                   </div>
                   <div>
-                    <div className="text-[11px] font-mono text-accent-orange uppercase tracking-widest mb-3">
-                      0{i + 1}
-                    </div>
                     <h3 className="font-display text-2xl font-normal tracking-tight leading-snug">
                       {a.title}
                     </h3>
@@ -233,13 +230,6 @@ function WhySSAPage() {
                         <Icon className="h-5 w-5 stroke-[1.5]" />
                       </div>
                       <div className="flex-1 min-w-0">
-                        <div
-                          className={`text-[11px] font-mono tracking-widest mb-1 ${
-                            isOrange ? "text-accent-orange" : "text-paper/50"
-                          }`}
-                        >
-                          LEVEL {r.level}
-                        </div>
                         <div className="text-base md:text-lg font-normal tracking-tight">
                           {r.label}
                         </div>

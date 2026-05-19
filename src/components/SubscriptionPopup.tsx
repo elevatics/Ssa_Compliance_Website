@@ -1,9 +1,10 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Mail, Shield, CheckCircle2 } from "lucide-react";
 
 const STORAGE_KEY = "ssa_popup_v3";
-const DELAY_MS = 3 * 60 * 1000; // 3 minutes
+const INITIAL_DELAY_MS = 2 * 60 * 1000; // 2 minutes
+const REOPEN_INTERVAL_MS = 5 * 1000; // 5 seconds
 
 export function SubscriptionPopup() {
   const [visible, setVisible] = useState(false);
@@ -11,24 +12,34 @@ export function SubscriptionPopup() {
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState("");
 
+  const reopenTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
   useEffect(() => {
-    // Clear legacy keys from older builds
     localStorage.removeItem("ssa_popup_v1");
     localStorage.removeItem("ssa_popup_v2");
 
-    const dismissed = localStorage.getItem(STORAGE_KEY);
-    if (dismissed) return;
+    if (localStorage.getItem(STORAGE_KEY) === "subscribed") return;
 
-    const timer = setTimeout(() => {
+    reopenTimerRef.current = setTimeout(() => {
       setVisible(true);
-    }, DELAY_MS);
+    }, INITIAL_DELAY_MS);
 
-    return () => clearTimeout(timer);
+    return () => {
+      if (reopenTimerRef.current) clearTimeout(reopenTimerRef.current);
+    };
   }, []);
 
+  function scheduleReopen() {
+    if (localStorage.getItem(STORAGE_KEY) === "subscribed") return;
+    if (reopenTimerRef.current) clearTimeout(reopenTimerRef.current);
+    reopenTimerRef.current = setTimeout(() => {
+      setVisible(true);
+    }, REOPEN_INTERVAL_MS);
+  }
+
   function dismiss() {
-    localStorage.setItem(STORAGE_KEY, "dismissed");
     setVisible(false);
+    scheduleReopen();
   }
 
   function handleSubmit(e: React.FormEvent) {
@@ -42,6 +53,7 @@ export function SubscriptionPopup() {
     console.info("[SSA] Subscription email captured:", trimmed);
     setSubmitted(true);
     localStorage.setItem(STORAGE_KEY, "subscribed");
+    if (reopenTimerRef.current) clearTimeout(reopenTimerRef.current);
     setTimeout(() => setVisible(false), 2800);
   }
 
@@ -91,8 +103,8 @@ export function SubscriptionPopup() {
                         <Shield className="h-4 w-4 text-accent-blue stroke-[1.5]" />
                       </div>
                       <div>
-                        <div className="eyebrow text-[10px] mb-0.5">Stay Compliant</div>
-                        <h2 className="font-display text-lg tracking-tight leading-tight">
+                        <div className="eyebrow text-xs mb-0.5">Stay Compliant</div>
+                        <h2 className="font-display text-xl tracking-tight leading-tight">
                           Get compliance insights
                           <span className="text-accent-blue font-light"> delivered to you.</span>
                         </h2>
@@ -105,7 +117,7 @@ export function SubscriptionPopup() {
                         "POSH compliance reminders & templates",
                         "Pan-India statutory filing calendars",
                       ].map((item) => (
-                        <li key={item} className="flex items-center gap-2.5 text-[12px] text-ink/75">
+                        <li key={item} className="flex items-center gap-2.5 text-sm text-ink/75">
                           <CheckCircle2 className="h-3.5 w-3.5 text-accent-blue stroke-[2] shrink-0" />
                           {item}
                         </li>
@@ -120,20 +132,20 @@ export function SubscriptionPopup() {
                           value={email}
                           onChange={(e) => { setEmail(e.target.value); setError(""); }}
                           placeholder="Enter your work email"
-                          className="w-full pl-9 pr-3 py-2.5 rounded-xl border border-rule/60 bg-bone text-[13px] text-ink placeholder:text-muted-ink/60 outline-none focus:ring-2 focus:ring-accent-blue/30 transition"
+                          className="w-full pl-9 pr-3 py-2.5 rounded-xl border border-rule/60 bg-bone text-sm text-ink placeholder:text-muted-ink/60 outline-none focus:ring-2 focus:ring-accent-blue/30 transition"
                           autoFocus
                         />
                       </div>
-                      {error && <p className="text-[11px] text-red-500 pl-0.5">{error}</p>}
+                      {error && <p className="text-xs text-red-500 pl-0.5">{error}</p>}
                       <button
                         type="submit"
-                        className="w-full bg-ink text-paper py-2.5 rounded-xl text-[13px] font-normal hover:bg-accent-blue transition"
+                        className="w-full bg-ink text-paper py-2.5 rounded-xl text-sm font-normal hover:bg-accent-blue transition"
                       >
                         Send me compliance insights
                       </button>
                     </form>
 
-                    <p className="text-[10px] text-muted-ink/55 text-center mt-3">
+                    <p className="text-xs text-muted-ink/55 text-center mt-3">
                       No spam. Unsubscribe at any time.
                     </p>
                   </>
@@ -147,7 +159,7 @@ export function SubscriptionPopup() {
                       <CheckCircle2 className="h-6 w-6 text-accent-blue stroke-[1.5]" />
                     </div>
                     <h3 className="font-display text-xl tracking-tight mb-2">You're in.</h3>
-                    <p className="text-[13px] text-muted-ink font-light leading-relaxed max-w-[220px]">
+                    <p className="text-sm text-muted-ink font-light leading-relaxed max-w-[220px]">
                       Compliance insights will be delivered to your inbox shortly.
                     </p>
                   </motion.div>

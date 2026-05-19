@@ -26,10 +26,10 @@ export function SiteHeader() {
     <header className="sticky top-0 z-50 glass border-b border-rule/60">
       <div className="mx-auto max-w-7xl px-6 lg:px-12 h-20 flex items-center justify-between">
         <Link to="/" className="flex items-center">
-          <img src={ssaLogo} alt="SSA Compliance" className="h-14 w-auto" />
+          <img src={ssaLogo} alt="SSA Compliance" className="h-[4.25rem] w-auto" />
         </Link>
 
-        <nav className="hidden md:flex items-center gap-10 text-[15px] font-normal text-muted-ink">
+        <nav className="hidden md:flex items-center gap-10 text-base font-normal text-muted-ink">
           {NAV_LINKS.map((l) => (
             <Link
               key={l.to}
@@ -49,7 +49,7 @@ export function SiteHeader() {
               <button
                 type="button"
                 onClick={openDialog}
-                className="hidden sm:inline-flex items-center gap-1.5 text-[15px] font-normal text-paper bg-ink px-5 py-2.5 rounded-full hover:bg-accent-blue transition"
+                className="hidden sm:inline-flex items-center gap-1.5 text-base font-normal text-paper bg-ink px-5 py-2.5 rounded-full hover:bg-accent-blue transition"
               >
                 Book a Consultation
               </button>
@@ -89,7 +89,7 @@ export function SiteHeader() {
                     setOpen(false);
                     openDialog();
                   }}
-                  className="inline-flex w-fit items-center gap-1.5 text-[15px] text-paper bg-ink px-5 py-2.5 rounded-full"
+                  className="inline-flex w-fit items-center gap-1.5 text-base text-paper bg-ink px-5 py-2.5 rounded-full"
                 >
                   Book a Consultation
                 </button>

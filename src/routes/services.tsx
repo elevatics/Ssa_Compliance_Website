@@ -174,7 +174,7 @@ function ServicesPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.9, delay: 0.05 }}
-            className="font-display text-[clamp(2.5rem,6vw,5.5rem)] leading-[1.05] tracking-tight max-w-5xl text-balance"
+            className="font-display text-[clamp(2.75rem,6.5vw,5.75rem)] leading-[1.05] tracking-tight max-w-5xl text-balance"
           >
             Comprehensive labour law
             <span className="block text-accent-blue font-light">compliance services. India.</span>
@@ -183,7 +183,7 @@ function ServicesPage() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.8, delay: 0.3 }}
-            className="mt-10 text-lg md:text-xl text-muted-ink max-w-2xl leading-relaxed font-light"
+            className="mt-10 text-xl md:text-2xl text-muted-ink max-w-2xl leading-relaxed font-light"
           >
             Four practices. One unbroken standard. Choose the entry point that matches your exposure today.
           </motion.p>
@@ -203,19 +203,14 @@ function ServicesPage() {
                   <button
                     key={t.key}
                     onClick={() => setActive(t.key)}
-                    className={`relative shrink-0 flex items-center gap-2.5 px-5 md:px-7 py-5 text-[14px] font-normal transition ${
-                      isActive ? "text-ink" : "text-muted-ink hover:text-ink"
+                    className={`relative shrink-0 flex items-center gap-2.5 px-5 md:px-7 py-4 rounded-lg text-[15px] md:text-base font-normal transition ${
+                      isActive
+                        ? "text-ink bg-bone"
+                        : "text-muted-ink hover:text-ink hover:bg-bone/50"
                     }`}
                   >
                     <Icon className="h-4 w-4 stroke-[1.5]" />
                     {t.label}
-                    {isActive && (
-                      <motion.span
-                        layoutId="tab-underline"
-                        className="absolute left-0 right-0 -bottom-px h-px bg-accent-orange"
-                        transition={{ type: "spring", stiffness: 400, damping: 32 }}
-                      />
-                    )}
                   </button>
                 );
               })}
@@ -234,23 +229,23 @@ function ServicesPage() {
                 className="lg:col-span-7"
               >
                 <div className="eyebrow mb-6">{current.label}</div>
-                <h2 className="font-display text-3xl md:text-5xl tracking-tight leading-[1.1] max-w-2xl">
+                <h2 className="font-display text-4xl md:text-5xl tracking-tight leading-[1.1] max-w-2xl">
                   {current.headline}
                 </h2>
-                <p className="mt-8 text-lg text-muted-ink max-w-xl leading-relaxed font-light">
+                <p className="mt-8 text-xl text-muted-ink max-w-xl leading-relaxed font-light">
                   {current.intro}
                 </p>
                 <div className="mt-10 flex flex-wrap gap-3">
                   <Link
                     to="/"
                     hash="contact"
-                    className="inline-flex items-center gap-2 bg-accent-orange text-paper px-7 py-3 rounded-full text-[14px] font-normal hover:opacity-90 transition"
+                    className="inline-flex items-center gap-2 bg-accent-orange text-paper px-7 py-3 rounded-full text-base font-normal hover:opacity-90 transition"
                   >
                     Discuss this practice
                   </Link>
                   <Link
                     to="/about"
-                    className="inline-flex items-center gap-2 text-ink px-7 py-3 rounded-full text-[14px] font-normal border border-ink/15 hover:bg-bone transition"
+                    className="inline-flex items-center gap-2 text-ink px-7 py-3 rounded-full text-base font-normal border border-ink/15 hover:bg-bone transition"
                   >
                     Meet the team <ArrowRight className="h-3.5 w-3.5" />
                   </Link>
@@ -268,7 +263,7 @@ function ServicesPage() {
                 className="lg:col-span-5"
               >
                 <div className="bg-bone rounded-3xl p-10 md:p-12">
-                  <div className="text-[13px] font-normal text-muted-ink uppercase tracking-wider mb-6">
+                  <div className="text-sm font-normal text-muted-ink uppercase tracking-wider mb-6">
                     What&rsquo;s included
                   </div>
                   <ul className="space-y-5">
@@ -277,7 +272,7 @@ function ServicesPage() {
                         <div className="mt-0.5 h-6 w-6 rounded-full bg-paper border border-rule flex items-center justify-center shrink-0">
                           <Check className="h-3 w-3 text-accent-blue stroke-[2.5]" />
                         </div>
-                        <span className="text-[15px] text-ink/85 font-light leading-relaxed">
+                        <span className="text-base text-ink/85 font-light leading-relaxed">
                           {b}
                         </span>
                       </li>
@@ -348,13 +343,8 @@ function ServicesPage() {
                       transition={{ duration: 0.45, delay: i * 0.06 }}
                       className="group relative w-64 md:w-72 shrink-0 rounded-3xl border border-paper/10 bg-paper/5 hover:bg-paper/10 transition-colors p-7 flex flex-col"
                     >
-                      <div className="absolute top-0 left-7 right-7 h-px bg-gradient-to-r from-accent-blue/50 to-accent-orange/50" />
-
                       <div className="h-12 w-12 rounded-2xl bg-paper/10 group-hover:bg-paper/20 transition flex items-center justify-center mb-5">
                         <Icon className="h-5 w-5 stroke-[1.5] text-paper" />
-                      </div>
-                      <div className="text-[10px] font-mono text-accent-orange tracking-[0.18em] mb-3">
-                        0{i + 1}
                       </div>
                       <div className="text-[16px] font-normal text-paper leading-snug mb-2">
                         {step.label}

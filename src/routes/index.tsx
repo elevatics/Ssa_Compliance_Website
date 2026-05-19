@@ -301,14 +301,14 @@ function Home() {
                   transition={{ duration: 0.5, delay: i * 0.08 }}
                   className="flex flex-col items-center text-center px-8 py-10 gap-5 group"
                 >
-                  <div className="h-12 w-12 rounded-full bg-ink/5 flex items-center justify-center group-hover:bg-accent-blue/10 transition">
-                    <Icon className="h-5 w-5 text-ink/50 group-hover:text-accent-blue stroke-[1.5] transition" />
+                  <div className="h-14 w-14 rounded-full bg-ink/5 flex items-center justify-center group-hover:bg-accent-blue/10 transition">
+                    <Icon className="h-6 w-6 text-ink/50 group-hover:text-accent-blue stroke-[1.5] transition" />
                   </div>
                   <div>
-                    <div className="text-[15px] font-medium leading-snug text-ink">
+                    <div className="text-lg font-medium leading-snug text-ink">
                       {c.title}
                     </div>
-                    <div className="mt-2 text-[13px] text-muted-ink leading-relaxed font-light">
+                    <div className="mt-3 text-base text-muted-ink leading-relaxed font-light">
                       {c.impact}
                     </div>
                   </div>
