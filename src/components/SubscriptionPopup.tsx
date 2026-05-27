@@ -3,8 +3,14 @@ import { motion, AnimatePresence } from "framer-motion";
 import { X, Mail, Shield, CheckCircle2 } from "lucide-react";
 
 const STORAGE_KEY = "ssa_popup_v3";
-const INITIAL_DELAY_MS = 2 * 60 * 1000; // 2 minutes
-const REOPEN_INTERVAL_MS = 5 * 1000; // 5 seconds
+const DISMISS_COUNT_KEY = "ssa_popup_dismiss_count";
+const INITIAL_DELAY_MS = 3 * 60 * 1000; // 3 minutes
+const REOPEN_BASE_MINUTES = 2; // then 2, 4, 8, 16… minutes
+
+function getReopenDelayMs(dismissCount: number) {
+  const minutes = REOPEN_BASE_MINUTES * 2 ** dismissCount;
+  return minutes * 60 * 1000;
+}
 
 export function SubscriptionPopup() {
   const [visible, setVisible] = useState(false);
@@ -13,12 +19,15 @@ export function SubscriptionPopup() {
   const [error, setError] = useState("");
 
   const reopenTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const dismissCountRef = useRef(0);
 
   useEffect(() => {
     localStorage.removeItem("ssa_popup_v1");
     localStorage.removeItem("ssa_popup_v2");
 
     if (localStorage.getItem(STORAGE_KEY) === "subscribed") return;
+
+    dismissCountRef.current = Number(localStorage.getItem(DISMISS_COUNT_KEY) ?? "0") || 0;
 
     reopenTimerRef.current = setTimeout(() => {
       setVisible(true);
@@ -32,9 +41,14 @@ export function SubscriptionPopup() {
   function scheduleReopen() {
     if (localStorage.getItem(STORAGE_KEY) === "subscribed") return;
     if (reopenTimerRef.current) clearTimeout(reopenTimerRef.current);
+
+    const delayMs = getReopenDelayMs(dismissCountRef.current);
+    dismissCountRef.current += 1;
+    localStorage.setItem(DISMISS_COUNT_KEY, String(dismissCountRef.current));
+
     reopenTimerRef.current = setTimeout(() => {
       setVisible(true);
-    }, REOPEN_INTERVAL_MS);
+    }, delayMs);
   }
 
   function dismiss() {

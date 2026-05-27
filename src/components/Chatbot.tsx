@@ -93,7 +93,9 @@ export function Chatbot() {
   const [typing, setTyping] = useState(false);
   const [toolStatus, setToolStatus] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const messagesRef = useRef<HTMLDivElement>(null);
   const bottomRef = useRef<HTMLDivElement>(null);
+  const shouldAutoScrollRef = useRef(true);
   const inputRef = useRef<HTMLInputElement>(null);
   const abortRef = useRef<AbortController | null>(null);
   const threadIdRef = useRef<string | null>(getChatThreadId());
@@ -105,12 +107,40 @@ export function Chatbot() {
     }
   }, [open, needsEmail]);
 
+  const scrollToBottom = useCallback((behavior: ScrollBehavior = "smooth") => {
+    const container = messagesRef.current;
+    if (!container) return;
+    container.scrollTo({ top: container.scrollHeight, behavior });
+  }, []);
+
+  const handleMessagesScroll = useCallback(() => {
+    const container = messagesRef.current;
+    if (!container) return;
+
+    const distanceFromBottom =
+      container.scrollHeight - container.scrollTop - container.clientHeight;
+    shouldAutoScrollRef.current = distanceFromBottom < 80;
+  }, []);
+
   useEffect(() => {
-    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages, typing, toolStatus]);
+    if (shouldAutoScrollRef.current) {
+      scrollToBottom(messages.some((message) => message.streaming) ? "auto" : "smooth");
+    }
+  }, [messages, typing, toolStatus, scrollToBottom]);
 
   useEffect(() => {
     if (!open) setExpanded(false);
+  }, [open]);
+
+  useEffect(() => {
+    if (!open) return;
+
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+    };
   }, [open]);
 
   useEffect(() => {
@@ -226,6 +256,7 @@ export function Chatbot() {
     const botMsgId = createMessageId();
     const botMsg: Message = { id: botMsgId, from: "bot", text: "", streaming: true };
 
+    shouldAutoScrollRef.current = true;
     setMessages((prev) => [...prev, userMsg, botMsg]);
     setInput("");
     setTyping(true);
@@ -344,14 +375,12 @@ export function Chatbot() {
     messages.length <= 1 && !typing && messages[0]?.id === "welcome";
 
   const panelClass = expanded
-    ? "fixed inset-4 md:inset-8 lg:inset-12 z-50 bg-paper rounded-3xl shadow-2xl border border-rule/60 flex overflow-hidden"
-    : "fixed bottom-6 right-6 z-50 w-[360px] max-w-[calc(100vw-2rem)] bg-paper rounded-3xl shadow-2xl border border-rule/60 flex flex-col overflow-hidden";
-
-  const panelStyle = expanded ? {} : { height: "520px" };
+    ? "fixed inset-0 sm:inset-4 md:inset-8 lg:inset-12 z-50 bg-paper sm:rounded-3xl shadow-2xl border border-rule/60 flex overflow-hidden max-h-[100dvh]"
+    : "fixed z-50 bg-paper shadow-2xl border border-rule/60 flex flex-col overflow-hidden max-h-[100dvh] inset-x-3 bottom-3 top-auto h-[min(520px,calc(100dvh-1.5rem-env(safe-area-inset-bottom)))] sm:inset-x-auto sm:right-6 sm:bottom-6 sm:top-auto sm:w-[360px] sm:max-w-[calc(100vw-2rem)] sm:h-[min(520px,calc(100dvh-5rem))] rounded-2xl sm:rounded-3xl";
 
   const chatBody = (
     <>
-      <div className="flex items-center justify-between px-5 py-4 bg-ink text-paper shrink-0">
+      <div className="flex items-center justify-between px-3 py-3 sm:px-5 sm:py-4 bg-ink text-paper shrink-0">
         <div className="flex items-center gap-3 min-w-0">
           {expanded && (
             <button
@@ -391,7 +420,7 @@ export function Chatbot() {
           <button
             type="button"
             onClick={() => setExpanded((value) => !value)}
-            className="h-8 w-8 rounded-full hover:bg-paper/10 flex items-center justify-center transition"
+            className="hidden sm:flex h-8 w-8 rounded-full hover:bg-paper/10 items-center justify-center transition"
             aria-label={expanded ? "Collapse chat" : "Expand chat"}
           >
             {expanded ? <Minimize2 className="h-4 w-4" /> : <Maximize2 className="h-4 w-4" />}
@@ -410,7 +439,11 @@ export function Chatbot() {
         </div>
       </div>
 
-      <div className="flex-1 overflow-y-auto px-4 py-4 space-y-3 bg-bone/30 min-h-0">
+      <div
+        ref={messagesRef}
+        onScroll={handleMessagesScroll}
+        className="flex-1 overflow-y-auto overscroll-contain px-3 py-4 space-y-3 bg-bone/30 min-h-0 touch-pan-y [-webkit-overflow-scrolling:touch]"
+      >
         {messages.map((msg) => (
           <div
             key={msg.id}
@@ -428,8 +461,8 @@ export function Chatbot() {
               )}
             </div>
             <div
-              className={`px-4 py-3 rounded-2xl text-[13px] leading-relaxed ${
-                expanded ? "max-w-[65%]" : "max-w-[78%]"
+              className={`px-3.5 py-2.5 sm:px-4 sm:py-3 rounded-2xl text-[13px] leading-relaxed max-w-[88%] sm:max-w-[78%] ${
+                expanded ? "md:max-w-[65%]" : ""
               } ${
                 msg.from === "bot"
                   ? "bg-paper text-ink rounded-bl-sm border border-rule/40"
@@ -487,7 +520,7 @@ export function Chatbot() {
       </div>
 
       {showQuickReplies && (
-        <div className="px-4 py-2 flex gap-2 flex-wrap bg-paper border-t border-rule/40 shrink-0">
+        <div className="px-3 py-2 sm:px-4 flex gap-1.5 sm:gap-2 flex-wrap bg-paper border-t border-rule/40 shrink-0 max-h-24 overflow-y-auto overscroll-contain">
           {QUICK_REPLIES.map((reply) => (
             <button
               key={reply}
@@ -503,7 +536,8 @@ export function Chatbot() {
 
       <form
         onSubmit={handleSubmit}
-        className="flex items-center gap-2 px-4 py-3 border-t border-rule/40 bg-paper shrink-0"
+        className="flex items-center gap-2 px-3 py-2.5 sm:px-4 sm:py-3 border-t border-rule/40 bg-paper shrink-0"
+        style={{ paddingBottom: "max(0.625rem, env(safe-area-inset-bottom))" }}
       >
         <input
           ref={inputRef}
@@ -535,12 +569,13 @@ export function Chatbot() {
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0, opacity: 0 }}
             transition={{ type: "spring", stiffness: 400, damping: 25 }}
-            className="fixed bottom-6 right-6 z-50"
+            className="fixed right-4 bottom-4 z-50 sm:right-6 sm:bottom-6"
+            style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
           >
             <button
               type="button"
               onClick={() => setOpen(true)}
-              className="h-14 w-14 rounded-full bg-accent-blue text-white shadow-lg hover:bg-accent-blue/90 transition flex items-center justify-center"
+              className="h-14 w-14 rounded-full bg-accent-blue text-white shadow-lg hover:bg-accent-blue/90 transition flex items-center justify-center touch-manipulation"
               aria-label="Open chat assistant"
             >
               <MessageCircle className="h-6 w-6" />
@@ -630,13 +665,11 @@ export function Chatbot() {
         {open && !needsEmail && (
           <motion.div
             key="chat-panel"
-            layout
             initial={{ opacity: 0, y: 24, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 24, scale: 0.95 }}
             transition={{ type: "spring", stiffness: 380, damping: 28 }}
             className={panelClass}
-            style={panelStyle}
           >
             {expanded && showSidebar && (
               <aside className="hidden md:flex w-[240px] shrink-0 flex-col border-r border-rule/60 bg-paper">
@@ -692,7 +725,7 @@ export function Chatbot() {
               </aside>
             )}
 
-            <div className="flex min-w-0 flex-1 flex-col">{chatBody}</div>
+            <div className="flex min-h-0 min-w-0 flex-1 flex-col h-full">{chatBody}</div>
           </motion.div>
         )}
       </AnimatePresence>

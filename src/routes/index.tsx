@@ -1,5 +1,4 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useState } from "react";
 import { SiteFooter } from "@/components/SiteFooter";
 import { motion } from "framer-motion";
 import {
@@ -134,8 +133,6 @@ const clients = [
 ];
 
 function Home() {
-  const [activeLogo, setActiveLogo] = useState<string | null>(null);
-
   return (
     <div className="bg-paper text-ink antialiased font-sans">
       <SiteHeader />
@@ -406,23 +403,15 @@ function Home() {
             Counsel to enterprises building across <span className="text-accent-blue">three regions.</span>
           </h2>
         </div>
-        <div className="relative py-16 mb-16">
-          <div className="flex marquee items-center gap-16 md:gap-24 whitespace-nowrap">
+        <div className="relative py-16 mb-16 overflow-hidden">
+          <div className="inline-flex marquee items-center gap-12 md:gap-24 whitespace-nowrap">
             {[...clients, ...clients].map((client, i) => (
-              <button
+              <img
                 key={i}
-                type="button"
-                aria-label={client.name}
-                onClick={() => setActiveLogo(activeLogo === client.name ? null : client.name)}
-                className="client-logo-btn shrink-0 border-0 bg-transparent p-0"
-              >
-                <img
-                  src={client.logo}
-                  alt=""
-                  aria-hidden
-                  className={`client-logo h-10 md:h-12 w-auto max-w-[140px] md:max-w-[180px] object-contain${activeLogo === client.name ? " is-active" : ""}`}
-                />
-              </button>
+                src={client.logo}
+                alt={client.name}
+                className="client-logo h-10 md:h-12 w-auto max-w-[140px] md:max-w-[180px] object-contain shrink-0"
+              />
             ))}
           </div>
         </div>
