@@ -1,4 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { useState } from "react";
 import { SiteFooter } from "@/components/SiteFooter";
 import { motion } from "framer-motion";
 import {
@@ -19,6 +20,15 @@ import imgEmployment from "@/assets/employment law advisory.png";
 import imgPanIndia from "@/assets/pan india.png";
 import imgStatutory from "@/assets/Statutory Records & Filings.png";
 import imgPosh from "@/assets/posh.png";
+import logoAshirvad from "@/assets/companylogo/Ashirvad-Logo.png";
+import logoBlueStar from "@/assets/companylogo/Blue_Star_Infotech-Logo.png";
+import logoBigBasket from "@/assets/companylogo/big basket logo.png";
+import logoErnstYoung from "@/assets/companylogo/ernst-young-logo.png";
+import logoLtDefence from "@/assets/companylogo/L&T  defence logo.png";
+import logoNovoNordisk from "@/assets/companylogo/Novo Nordisk logo.png";
+import logoOlaElectric from "@/assets/companylogo/ola electric logo.png";
+import logoSprinklr from "@/assets/companylogo/Sprinklr logo.png";
+import logoTajVivanta from "@/assets/companylogo/taj vivanta logo.png";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -112,18 +122,20 @@ const services = [
 ];
 
 const clients = [
-  "Ernst & Young",
-  "OLA Electric",
-  "L&T Defence",
-  "BigBasket",
-  "TAJ Vivanta",
-  "Novo Nordisk",
-  "Blue Star",
-  "Sprinklr",
-  "Ashirvad Pipes",
+  { name: "Ernst & Young", logo: logoErnstYoung },
+  { name: "OLA Electric", logo: logoOlaElectric },
+  { name: "L&T Defence", logo: logoLtDefence },
+  { name: "BigBasket", logo: logoBigBasket },
+  { name: "TAJ Vivanta", logo: logoTajVivanta },
+  { name: "Novo Nordisk", logo: logoNovoNordisk },
+  { name: "Blue Star", logo: logoBlueStar },
+  { name: "Sprinklr", logo: logoSprinklr },
+  { name: "Ashirvad Pipes", logo: logoAshirvad },
 ];
 
 function Home() {
+  const [activeLogo, setActiveLogo] = useState<string | null>(null);
+
   return (
     <div className="bg-paper text-ink antialiased font-sans">
       <SiteHeader />
@@ -395,14 +407,22 @@ function Home() {
           </h2>
         </div>
         <div className="relative py-16 mb-16">
-          <div className="flex marquee gap-20 whitespace-nowrap">
-            {[...clients, ...clients].map((c, i) => (
-              <span
+          <div className="flex marquee items-center gap-16 md:gap-24 whitespace-nowrap">
+            {[...clients, ...clients].map((client, i) => (
+              <button
                 key={i}
-                className="text-2xl md:text-3xl font-light text-muted-ink/70"
+                type="button"
+                aria-label={client.name}
+                onClick={() => setActiveLogo(activeLogo === client.name ? null : client.name)}
+                className="client-logo-btn shrink-0 border-0 bg-transparent p-0"
               >
-                {c}
-              </span>
+                <img
+                  src={client.logo}
+                  alt=""
+                  aria-hidden
+                  className={`client-logo h-10 md:h-12 w-auto max-w-[140px] md:max-w-[180px] object-contain${activeLogo === client.name ? " is-active" : ""}`}
+                />
+              </button>
             ))}
           </div>
         </div>
