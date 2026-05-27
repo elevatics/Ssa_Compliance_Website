@@ -16,6 +16,7 @@ import member1 from "@/assets/Member1.png";
 import member2 from "@/assets/Member2.png";
 import member3 from "@/assets/Member3.png";
 import member4 from "@/assets/Member4.png";
+import imgRohitMunjal from "@/assets/advisoryboard/Rohit Munjal.jpg";
 import { SiteHeader } from "@/components/SiteHeader";
 import { BookingDialog } from "@/components/BookingDialog";
 
@@ -79,8 +80,8 @@ const leadership = [
   },
 ];
 
-const advisory = [
-  { name: "Rohit Munjal", role: "ex-Global CHRO, OLA" },
+const advisory: { name: string; role: string; image?: string }[] = [
+  { name: "Rohit Munjal", role: "ex-Global CHRO, OLA", image: imgRohitMunjal },
   { name: "Manish", role: "Global CFO & Board Advisor" },
   { name: "Dr. Mahesh Kumar", role: "Senior Advocate" },
   { name: "Mansij", role: "CHRO, UNext" },
@@ -279,7 +280,7 @@ function AboutPage() {
                   className="w-[280px] shrink-0 bg-paper border border-rule/60 rounded-2xl p-8 hover:border-accent-blue/40 transition"
                 >
                   <img
-                    src={`https://i.pravatar.cc/200?img=${(i % 70) + 50}`}
+                    src={a.image ?? `https://i.pravatar.cc/200?img=${(i % 70) + 50}`}
                     alt={`Portrait of ${a.name}`}
                     loading="lazy"
                     className="h-12 w-12 rounded-full object-cover mb-6 ring-1 ring-rule/60"
