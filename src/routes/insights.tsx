@@ -69,12 +69,12 @@ const publications = [
 ];
 
 const capabilities = [
-  { num: "01", icon: Gavel, label: "Labour Law Contracts" },
-  { num: "02", icon: ShieldCheck, label: "Social Security & Industry Guidance" },
-  { num: "03", icon: Users, label: "Employee Relations & Gender Equality" },
-  { num: "04", icon: ClipboardList, label: "HR Compliance Management" },
-  { num: "05", icon: FileSignature, label: "Policy and HR letter Drafting" },
-  { num: "06", icon: BookOpen, label: "Mandatory Compliances" },
+  { num: "02", icon: Gavel, label: "Labour Law Contracts / Policy HR letter drafting" },
+  { num: "06", icon: ShieldCheck, label: "Social Security & Industry Guidance" },
+  { num: "04", icon: Users, label: "Employee Relations & Gender Equality (POSH Compliances)" },
+  { num: "01", icon: ClipboardList, label: "HR Compliance Management" },
+  { num: "03", icon: FileSignature, label: "Compliance Health Check" },
+  { num: "05", icon: BookOpen, label: "Mandatory Labour Law Compliances" },
 ];
 
 function InsightsPage() {
@@ -100,7 +100,7 @@ function InsightsPage() {
             className="font-display text-[clamp(2.5rem,6vw,5.5rem)] leading-[1.05] tracking-tight max-w-5xl text-balance"
           >
             Thought leadership in
-            <span className="block text-accent-blue font-light">employment law.</span>
+            <span className="block text-accent-blue font-light">Employment Law.</span>
           </motion.h1>
           <motion.p
             initial={{ opacity: 0 }}

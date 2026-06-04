@@ -83,7 +83,7 @@ export const Route = createFileRoute("/")({
 });
 
 const challenges = [
-  { icon: MapPin, title: "Multi-state variations", impact: "28 different state labour regimes." },
+  { icon: MapPin, title: "Multi-state variations", impact: "28 States and 8 Union Territories  labour regimes." },
   { icon: Layers, title: "250+ Acts. 1500+ obligations", impact: "Overlapping duties across four new Labour Codes." },
   { icon: Clock3, title: "Frequent amendments", impact: "Over 100 regulatory changes every year." },
   { icon: FolderOpen, title: "Record maintenance", impact: "50+ registers and periodic statutory filings." },
@@ -191,23 +191,11 @@ function Home() {
                   href="#contact"
                   className="inline-flex items-center gap-2 bg-paper text-ink px-7 py-3.5 rounded-full text-[15px] font-normal hover:bg-accent-blue hover:text-paper transition"
                 >
-                  Request Compliance Assessment
+                   Talk to an Expert
                 </a>
-                <a
-                  href="#contact"
-                  className="inline-flex items-center gap-2 text-paper px-7 py-3.5 rounded-full text-[15px] font-normal border border-paper/25 hover:bg-paper/10 transition"
-                >
-                  Talk to an Expert
-                </a>
+               
               </motion.div>
-              <motion.p
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.8, delay: 0.7 }}
-                className="mt-8 text-[13px] text-paper/50 font-light max-w-lg leading-relaxed"
-              >
-                SEO focus: labour law compliance India · HR compliance services · POSH compliance · statutory compliance management
-              </motion.p>
+             
             </div>
 
             {/* RIGHT — 2x2 stat cards (staggered floating columns) */}

@@ -10,6 +10,7 @@ import {
   Award,
   ShieldCheck,
   ScrollText,
+  User,
 } from "lucide-react";
 import aboutBg from "@/assets/about-boardroom.jpg";
 import member1 from "@/assets/Member1.png";
@@ -17,6 +18,9 @@ import member2 from "@/assets/Member2.png";
 import member3 from "@/assets/Member3.png";
 import member4 from "@/assets/Member4.png";
 import imgRohitMunjal from "@/assets/advisoryboard/Rohit Munjal.jpg";
+import imgManishShroff from "@/assets/advisoryboard/manish shroff.jpeg";
+import imgMansij from "@/assets/advisoryboard/mansij.jpg";
+import imgSubrata from "@/assets/advisoryboard/subrata.jpeg";
 import { SiteHeader } from "@/components/SiteHeader";
 import { BookingDialog } from "@/components/BookingDialog";
 
@@ -81,11 +85,11 @@ const leadership = [
 ];
 
 const advisory: { name: string; role: string; image?: string }[] = [
-  { name: "Rohit Munjal", role: "ex-Global CHRO, OLA", image: imgRohitMunjal },
-  { name: "Manish", role: "Global CFO & Board Advisor" },
+  { name: "Rohit Munjal", role: "Global CHRO", image: imgRohitMunjal },
+  { name: "Manish Shroff", role: "Global CFO & Board Advisor", image: imgManishShroff },
   { name: "Dr. Mahesh Kumar", role: "Senior Advocate" },
-  { name: "Mansij", role: "CHRO, UNext" },
-  { name: "Dr. Subrata Chattopadhyay", role: "IIT-ISM" },
+  { name: "Mansij Majumder", role: "CHRO, UNext", image: imgMansij },
+  { name: "Dr. Subrata Chattopadhyay", role: "IIT-ISM", image: imgSubrata },
 ];
 
 function AboutPage() {
@@ -279,12 +283,21 @@ function AboutPage() {
                   transition={{ duration: 0.5, delay: i * 0.06 }}
                   className="w-[280px] shrink-0 bg-paper border border-rule/60 rounded-2xl p-8 hover:border-accent-blue/40 transition"
                 >
-                  <img
-                    src={a.image ?? `https://i.pravatar.cc/200?img=${(i % 70) + 50}`}
-                    alt={`Portrait of ${a.name}`}
-                    loading="lazy"
-                    className="h-12 w-12 rounded-full object-cover mb-6 ring-1 ring-rule/60"
-                  />
+                  {a.image ? (
+                    <img
+                      src={a.image}
+                      alt={`Portrait of ${a.name}`}
+                      loading="lazy"
+                      className="h-12 w-12 rounded-full object-cover mb-6 ring-1 ring-rule/60"
+                    />
+                  ) : (
+                    <div
+                      aria-hidden
+                      className="h-12 w-12 rounded-full mb-6 ring-1 ring-rule/60 bg-bone flex items-center justify-center"
+                    >
+                      <User className="h-6 w-6 text-muted-ink/60 stroke-[1.5]" />
+                    </div>
+                  )}
                   <div className="text-base font-normal tracking-tight">{a.name}</div>
                   <div className="mt-1 text-[13px] text-muted-ink font-light leading-relaxed">
                     {a.role}

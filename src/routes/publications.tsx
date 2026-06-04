@@ -281,7 +281,7 @@ function PublicationsPage() {
             transition={{ duration: 0.6 }}
             className="eyebrow mb-10"
           >
-            Knowledge &amp; Research
+            Publications
           </motion.div>
           <motion.h1
             initial={{ opacity: 0, y: 20 }}
@@ -289,18 +289,9 @@ function PublicationsPage() {
             transition={{ duration: 0.9, delay: 0.05 }}
             className="font-display text-[clamp(2.5rem,6vw,5.5rem)] leading-[1.05] tracking-tight max-w-5xl text-balance"
           >
-            Comprehensive labour law
-            <span className="block text-accent-orange font-light">compliance services.</span>
+            Books Published By the
+            <span className="block text-accent-orange font-light">Founders.</span>
           </motion.h1>
-          <motion.p
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.8, delay: 0.3 }}
-            className="mt-10 text-lg md:text-xl text-muted-ink max-w-2xl leading-relaxed font-light"
-          >
-            Four practices. One unbroken standard. Chosen freely until the moment we reach your
-            specific area.
-          </motion.p>
         </div>
       </section>
 

@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useState, useRef, useEffect, useCallback } from "react";
 import {
   ArrowRight,
-  Scale,
+  Handshake,
   ClipboardCheck,
   FolderOpen,
   ShieldCheck,
@@ -54,7 +54,7 @@ const tabs: {
   {
     key: "advisory",
     label: "Advisory",
-    icon: Scale,
+    icon: Handshake,
     headline: "Strategic counsel for Boards and HR leadership.",
     intro:
       "Statutory interpretation, Apex Court judgments and risk-zone opinions — translated into commercial decisions you can act on.",
@@ -75,7 +75,7 @@ const tabs: {
       "Centralised pan-India audits of core operations and the extended contractor ecosystem — with a clear, costed mitigation roadmap.",
     bullets: [
       "Centralised pan-India compliance audits",
-      "Contractor & vendor compliance audits",
+      "Establishment and contractor compliance audits",
       "M&A due diligence on labour exposure",
       "Risk assessment & mitigation roadmap",
       "Periodic re-audits and assurance reviews",
@@ -85,11 +85,11 @@ const tabs: {
     key: "records",
     label: "Records & Compliances",
     icon: FolderOpen,
-    headline: "End-to-end statutory implementation.",
+    headline: "End-to-end Statutory Compliances.",
     intro:
       "Every register, every filing, every renewal — executed on time across jurisdictions, with multi-language statutory displays.",
     bullets: [
-      "End-to-end statutory registers (50+ formats)",
+      "End-to-end statutory registers ( payroll compliances and post payroll compliances )",
       "EPF, ESI, PT, LWF & Gratuity administration",
       "CL(RA) licences, registrations & renewals",
       "Periodic returns, filings and renewals",

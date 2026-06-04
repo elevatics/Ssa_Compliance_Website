@@ -60,7 +60,7 @@ export function SiteFooter() {
               SSA COMPLIANCE SERVICES LLP
             </p>
             <p className="text-[12px] text-white/60 leading-relaxed">
-              #C2J, 3rd Floor, Unispace,<br />
+              #C21, 3rd Floor, Unispace,<br />
               Plot No: 128-P2, near Ginger Hotel,<br />
               EPIP Zone, Whitefield,<br />
               Bengaluru Karnataka 560066

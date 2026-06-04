@@ -1,22 +1,18 @@
-import { useState, useRef, useEffect, useCallback } from "react";
+import { useState, useRef, useEffect, useCallback, type ComponentProps } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 import {
   MessageCircle,
   X,
   Send,
   Bot,
   User,
-  Maximize2,
-  Minimize2,
   AlertCircle,
   Plus,
-  Trash2,
-  PanelLeftClose,
-  PanelLeft,
   Loader2,
 } from "lucide-react";
 import {
-  deleteThread,
   getThreadMessages,
   listThreads,
   streamChat,
@@ -57,20 +53,90 @@ function welcomeMessages(): Message[] {
   return [{ id: "welcome", from: "bot", text: WELCOME_MESSAGE }];
 }
 
-function formatText(text: string) {
-  return text.split("\n").map((line, i, arr) => {
-    const formatted = line
-      .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")
-      .replace(/^(\d+)\.\s/, "<strong>$1.</strong> ")
-      .replace(/^•\s/, "• ");
+type MarkdownPartProps = ComponentProps<"div">;
 
+const chatMarkdownComponents = {
+  h1: ({ children }: MarkdownPartProps) => (
+    <h1 className="mt-3 mb-1.5 text-[14px] font-medium first:mt-0">{children}</h1>
+  ),
+  h2: ({ children }: MarkdownPartProps) => (
+    <h2 className="mt-3 mb-1.5 text-[14px] font-medium first:mt-0">{children}</h2>
+  ),
+  h3: ({ children }: MarkdownPartProps) => (
+    <h3 className="mt-3 mb-1 text-[13px] font-medium first:mt-0">{children}</h3>
+  ),
+  h4: ({ children }: MarkdownPartProps) => (
+    <h4 className="mt-2 mb-1 text-[13px] font-medium first:mt-0">{children}</h4>
+  ),
+  p: ({ children }: MarkdownPartProps) => (
+    <p className="mb-2 last:mb-0 [li_&]:mb-0">{children}</p>
+  ),
+  ul: ({ children }: MarkdownPartProps) => (
+    <ul className="mb-2 list-disc space-y-0.5 pl-4 last:mb-0">{children}</ul>
+  ),
+  ol: ({ children }: MarkdownPartProps) => (
+    <ol className="mb-2 list-decimal space-y-0.5 pl-4 last:mb-0">{children}</ol>
+  ),
+  li: ({ children }: MarkdownPartProps) => <li className="leading-relaxed">{children}</li>,
+  hr: () => <hr className="my-2.5 border-0 border-t border-rule/50" />,
+  strong: ({ children }: MarkdownPartProps) => (
+    <strong className="font-medium">{children}</strong>
+  ),
+  em: ({ children }: MarkdownPartProps) => <em>{children}</em>,
+  a: ({ href, children }: MarkdownPartProps & { href?: string }) => (
+    <a
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="underline underline-offset-2 hover:opacity-80"
+    >
+      {children}
+    </a>
+  ),
+  table: ({ children }: MarkdownPartProps) => (
+    <div className="my-2 -mx-1 overflow-x-auto">
+      <table className="w-full min-w-[12rem] border-collapse text-[12px]">{children}</table>
+    </div>
+  ),
+  thead: ({ children }: MarkdownPartProps) => <thead>{children}</thead>,
+  tbody: ({ children }: MarkdownPartProps) => <tbody>{children}</tbody>,
+  tr: ({ children }: MarkdownPartProps) => (
+    <tr className="border-b border-rule/40">{children}</tr>
+  ),
+  th: ({ children }: MarkdownPartProps) => (
+    <th className="px-2 py-1 text-left font-medium">{children}</th>
+  ),
+  td: ({ children }: MarkdownPartProps) => <td className="px-2 py-1">{children}</td>,
+  blockquote: ({ children }: MarkdownPartProps) => (
+    <blockquote className="my-2 border-l-2 border-rule/60 pl-3 text-muted-ink">{children}</blockquote>
+  ),
+  code: ({ children, className }: MarkdownPartProps & { className?: string }) => {
+    const isBlock = className?.includes("language-");
+    if (isBlock) {
+      return (
+        <pre className="my-2 overflow-x-auto rounded-lg bg-bone px-3 py-2 text-[12px]">
+          <code className={className}>{children}</code>
+        </pre>
+      );
+    }
     return (
-      <span key={i}>
-        <span dangerouslySetInnerHTML={{ __html: formatted }} />
-        {i < arr.length - 1 && <br />}
-      </span>
+      <code className="rounded bg-bone/80 px-1 py-0.5 text-[12px] font-mono">{children}</code>
     );
-  });
+  },
+};
+
+function ChatMarkdown({ text, variant }: { text: string; variant: "bot" | "user" }) {
+  return (
+    <div
+      className={`chat-markdown min-w-0 break-words [&_*:first-child]:mt-0 [&_*:last-child]:mb-0 ${
+        variant === "user" ? "text-paper" : "text-ink"
+      }`}
+    >
+      <ReactMarkdown remarkPlugins={[remarkGfm]} components={chatMarkdownComponents}>
+        {text}
+      </ReactMarkdown>
+    </div>
+  );
 }
 
 function truncateTitle(title: string | undefined, max = 42) {
@@ -80,8 +146,6 @@ function truncateTitle(title: string | undefined, max = 42) {
 
 export function Chatbot() {
   const [open, setOpen] = useState(false);
-  const [expanded, setExpanded] = useState(false);
-  const [showSidebar, setShowSidebar] = useState(true);
   const [email, setEmail] = useState(() => getChatUserEmail() ?? "");
   const [emailDraft, setEmailDraft] = useState("");
   const [emailError, setEmailError] = useState<string | null>(null);
@@ -127,10 +191,6 @@ export function Chatbot() {
       scrollToBottom(messages.some((message) => message.streaming) ? "auto" : "smooth");
     }
   }, [messages, typing, toolStatus, scrollToBottom]);
-
-  useEffect(() => {
-    if (!open) setExpanded(false);
-  }, [open]);
 
   useEffect(() => {
     if (!open) return;
@@ -229,19 +289,6 @@ export function Chatbot() {
     setTyping(false);
     setToolStatus(null);
     await loadThreadMessages(threadId);
-  }
-
-  async function handleDeleteThread(threadId: string) {
-    try {
-      await deleteThread(threadId);
-      setThreads((prev) => prev.filter((thread) => thread.id !== threadId));
-
-      if (threadIdRef.current === threadId) {
-        startNewChat();
-      }
-    } catch {
-      setError("Unable to delete this conversation.");
-    }
   }
 
   async function sendMessage(text: string) {
@@ -374,28 +421,13 @@ export function Chatbot() {
   const showQuickReplies =
     messages.length <= 1 && !typing && messages[0]?.id === "welcome";
 
-  const panelClass = expanded
-    ? "fixed inset-0 sm:inset-4 md:inset-8 lg:inset-12 z-50 bg-paper sm:rounded-3xl shadow-2xl border border-rule/60 flex overflow-hidden max-h-[100dvh]"
-    : "fixed z-50 bg-paper shadow-2xl border border-rule/60 flex flex-col overflow-hidden max-h-[100dvh] inset-x-3 bottom-3 top-auto h-[min(520px,calc(100dvh-1.5rem-env(safe-area-inset-bottom)))] sm:inset-x-auto sm:right-6 sm:bottom-6 sm:top-auto sm:w-[360px] sm:max-w-[calc(100vw-2rem)] sm:h-[min(520px,calc(100dvh-5rem))] rounded-2xl sm:rounded-3xl";
+  const panelClass =
+    "fixed z-50 bg-paper shadow-2xl border border-rule/60 flex flex-col overflow-hidden max-h-[100dvh] inset-x-3 bottom-3 top-auto h-[min(520px,calc(100dvh-1.5rem-env(safe-area-inset-bottom)))] sm:inset-x-auto sm:right-6 sm:bottom-6 sm:top-auto sm:w-[360px] sm:max-w-[calc(100vw-2rem)] sm:h-[min(520px,calc(100dvh-5rem))] rounded-2xl sm:rounded-3xl";
 
   const chatBody = (
     <>
       <div className="flex items-center justify-between px-3 py-3 sm:px-5 sm:py-4 bg-ink text-paper shrink-0">
         <div className="flex items-center gap-3 min-w-0">
-          {expanded && (
-            <button
-              type="button"
-              onClick={() => setShowSidebar((value) => !value)}
-              className="h-8 w-8 rounded-full hover:bg-paper/10 flex items-center justify-center transition shrink-0"
-              aria-label={showSidebar ? "Hide conversations" : "Show conversations"}
-            >
-              {showSidebar ? (
-                <PanelLeftClose className="h-4 w-4" />
-              ) : (
-                <PanelLeft className="h-4 w-4" />
-              )}
-            </button>
-          )}
           <div className="h-9 w-9 rounded-full bg-accent-blue/20 flex items-center justify-center shrink-0">
             <Bot className="h-4 w-4 text-paper" />
           </div>
@@ -416,14 +448,6 @@ export function Chatbot() {
             title="New chat"
           >
             <Plus className="h-4 w-4" />
-          </button>
-          <button
-            type="button"
-            onClick={() => setExpanded((value) => !value)}
-            className="hidden sm:flex h-8 w-8 rounded-full hover:bg-paper/10 items-center justify-center transition"
-            aria-label={expanded ? "Collapse chat" : "Expand chat"}
-          >
-            {expanded ? <Minimize2 className="h-4 w-4" /> : <Maximize2 className="h-4 w-4" />}
           </button>
           <button
             type="button"
@@ -461,16 +485,17 @@ export function Chatbot() {
               )}
             </div>
             <div
-              className={`px-3.5 py-2.5 sm:px-4 sm:py-3 rounded-2xl text-[13px] leading-relaxed max-w-[88%] sm:max-w-[78%] ${
-                expanded ? "md:max-w-[65%]" : ""
-              } ${
+              className={`px-3.5 py-2.5 sm:px-4 sm:py-3 rounded-2xl text-[13px] leading-relaxed max-w-[88%] sm:max-w-[78%] min-w-0 ${
                 msg.from === "bot"
                   ? "bg-paper text-ink rounded-bl-sm border border-rule/40"
                   : "bg-accent-blue text-paper rounded-br-sm"
               }`}
             >
               {msg.text ? (
-                formatText(msg.text)
+                <ChatMarkdown
+                  text={msg.text}
+                  variant={msg.from === "bot" ? "bot" : "user"}
+                />
               ) : (
                 <span className="text-muted-ink italic">…</span>
               )}
@@ -586,19 +611,6 @@ export function Chatbot() {
       </AnimatePresence>
 
       <AnimatePresence>
-        {open && expanded && (
-          <motion.div
-            key="chat-backdrop"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-40 bg-ink/30 backdrop-blur-sm"
-            onClick={() => setExpanded(false)}
-          />
-        )}
-      </AnimatePresence>
-
-      <AnimatePresence>
         {open && needsEmail && (
           <motion.div
             key="email-gate"
@@ -671,60 +683,6 @@ export function Chatbot() {
             transition={{ type: "spring", stiffness: 380, damping: 28 }}
             className={panelClass}
           >
-            {expanded && showSidebar && (
-              <aside className="hidden md:flex w-[240px] shrink-0 flex-col border-r border-rule/60 bg-paper">
-                <div className="px-4 py-4 border-b border-rule/60">
-                  <button
-                    type="button"
-                    onClick={startNewChat}
-                    className="inline-flex w-full items-center justify-center gap-2 rounded-full border border-rule/60 px-3 py-2 text-[12px] text-ink hover:bg-bone transition"
-                  >
-                    <Plus className="h-3.5 w-3.5" />
-                    New chat
-                  </button>
-                </div>
-
-                <div className="flex-1 overflow-y-auto px-2 py-3">
-                  {threadsLoading ? (
-                    <div className="flex items-center justify-center py-8 text-muted-ink">
-                      <Loader2 className="h-4 w-4 animate-spin" />
-                    </div>
-                  ) : threads.length === 0 ? (
-                    <p className="px-2 text-[12px] text-muted-ink">No conversations yet</p>
-                  ) : (
-                    <div className="space-y-1">
-                      {threads.map((thread) => {
-                        const active = thread.id === activeThreadId;
-                        return (
-                          <div key={thread.id} className="group relative">
-                            <button
-                              type="button"
-                              onClick={() => void selectThread(thread.id)}
-                              className={`w-full rounded-xl px-3 py-2.5 text-left text-[12px] transition ${
-                                active
-                                  ? "bg-accent-blue/10 text-ink"
-                                  : "text-muted-ink hover:bg-bone hover:text-ink"
-                              }`}
-                            >
-                              <span className="block truncate">{truncateTitle(thread.title)}</span>
-                            </button>
-                            <button
-                              type="button"
-                              onClick={() => void handleDeleteThread(thread.id)}
-                              className="absolute right-2 top-1/2 -translate-y-1/2 rounded-full p-1 text-muted-ink opacity-0 transition hover:bg-paper hover:text-accent-orange group-hover:opacity-100"
-                              aria-label="Delete conversation"
-                            >
-                              <Trash2 className="h-3.5 w-3.5" />
-                            </button>
-                          </div>
-                        );
-                      })}
-                    </div>
-                  )}
-                </div>
-              </aside>
-            )}
-
             <div className="flex min-h-0 min-w-0 flex-1 flex-col h-full">{chatBody}</div>
           </motion.div>
         )}
