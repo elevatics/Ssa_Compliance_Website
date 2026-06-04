@@ -19,15 +19,22 @@ import imgEmployment from "@/assets/employment law advisory.png";
 import imgPanIndia from "@/assets/pan india.png";
 import imgStatutory from "@/assets/Statutory Records & Filings.png";
 import imgPosh from "@/assets/posh.png";
-import logoAshirvad from "@/assets/companylogo/Ashirvad-Logo.png";
-import logoBlueStar from "@/assets/companylogo/Blue_Star_Infotech-Logo.png";
-import logoBigBasket from "@/assets/companylogo/big basket logo.png";
-import logoErnstYoung from "@/assets/companylogo/ernst-young-logo.png";
-import logoLtDefence from "@/assets/companylogo/L&T  defence logo.png";
-import logoNovoNordisk from "@/assets/companylogo/Novo Nordisk logo.png";
-import logoOlaElectric from "@/assets/companylogo/ola electric logo.png";
-import logoSprinklr from "@/assets/companylogo/Sprinklr logo.png";
-import logoTajVivanta from "@/assets/companylogo/taj vivanta logo.png";
+const clientLogoModules = import.meta.glob<string>("../assets/companylogo/*.{png,jpg,jpeg,webp,avif}", {
+  eager: true,
+  import: "default",
+});
+
+function logoPathToName(path: string): string {
+  const file = path.split("/").pop()?.replace(/\.[^.]+$/, "") ?? "Client";
+  return file.replace(/[-_]+/g, " ").replace(/\s*logo\s*/gi, " ").replace(/\s+/g, " ").trim();
+}
+
+const clients = Object.entries(clientLogoModules)
+  .sort(([a], [b]) => a.localeCompare(b))
+  .map(([path, logo]) => ({
+    name: logoPathToName(path),
+    logo,
+  }));
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -118,18 +125,6 @@ const services = [
     tone: "orange" as const,
     img: imgPosh,
   },
-];
-
-const clients = [
-  { name: "Ernst & Young", logo: logoErnstYoung },
-  { name: "OLA Electric", logo: logoOlaElectric },
-  { name: "L&T Defence", logo: logoLtDefence },
-  { name: "BigBasket", logo: logoBigBasket },
-  { name: "TAJ Vivanta", logo: logoTajVivanta },
-  { name: "Novo Nordisk", logo: logoNovoNordisk },
-  { name: "Blue Star", logo: logoBlueStar },
-  { name: "Sprinklr", logo: logoSprinklr },
-  { name: "Ashirvad Pipes", logo: logoAshirvad },
 ];
 
 function Home() {

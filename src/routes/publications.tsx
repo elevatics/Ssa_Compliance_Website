@@ -3,7 +3,8 @@ import { SiteFooter } from "@/components/SiteFooter";
 import { motion, AnimatePresence } from "framer-motion";
 import { SiteHeader } from "@/components/SiteHeader";
 import { BookingDialog } from "@/components/BookingDialog";
-import { ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
+import { ArrowRight, ChevronLeft, ChevronRight, ExternalLink } from "lucide-react";
+import ssaLogo from "@/assets/SSA LOGO.png";
 import { useEffect, useState } from "react";
 
 // Order: image.png → image (1).png → image (2).png … image (5).png
@@ -172,6 +173,41 @@ It is, hence, crucial and critical for everyone whether be an owner, entrepreneu
 
 const ITEMS_PER_PAGE = 3;
 
+type ContentFilter = "all" | "publications" | "newsletter";
+
+export const newsletters = [
+  {
+    slug: "april-may-2026",
+    title: "Labour Law Compliance Developments Every Employer Should Know",
+    period: "April–May 2026",
+    excerpt:
+      "OSHWC break requirements, EPF and High Court rulings, wage structures, and workforce welfare under India's evolving labour law framework.",
+    url: "https://www.linkedin.com/posts/ssa-compliance-updates-april-may-2026-ugcPost-7465381836433637376-Renf/",
+  },
+  {
+    slug: "february-march-2026",
+    title: "Key Labour Law Developments Every Employer Should Know",
+    period: "February–March 2026",
+    excerpt:
+      "Supreme Court compensation penalties, Punjab & Haryana High Court on no-work-no-pay, and labour code rollout challenges for employers.",
+    url: "https://www.linkedin.com/feed/update/urn:li:activity:7444631717845319680/",
+  },
+  {
+    slug: "january-2026",
+    title: "Labour Law Updates: Key Developments & Compliance Implications",
+    period: "January 2026",
+    excerpt:
+      "Workman classification, overtime wage calculations, contractor claims, and preparing for Labour Code implementation from April.",
+    url: "https://www.linkedin.com/feed/update/urn:li:activity:7422571483094392833/",
+  },
+];
+
+const contentFilters: { key: ContentFilter; label: string }[] = [
+  { key: "all", label: "All" },
+  { key: "publications", label: "Publications" },
+  { key: "newsletter", label: "Newsletter" },
+];
+
 function BookRow({
   book,
   isActive,
@@ -256,9 +292,45 @@ function BookRow({
   );
 }
 
+function NewsletterRow({ item }: { item: (typeof newsletters)[0] }) {
+  return (
+    <div className="border-b border-rule/70 last:border-b-0">
+      <a
+        href={item.url}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="group flex items-center justify-between gap-6 py-5 md:py-6 transition-colors duration-200 hover:bg-bone/50"
+      >
+        <div className="min-w-0 pr-4">
+          <p className="text-[12px] uppercase tracking-widest text-muted-ink mb-1.5">
+            {item.period}
+          </p>
+          <h3 className="font-display text-[1.05rem] md:text-[1.15rem] font-normal tracking-tight text-ink/85">
+            {item.title}
+          </h3>
+          <span className="mt-2 inline-flex items-center gap-1.5 text-[13px] text-muted-ink group-hover:text-accent-blue">
+            View on LinkedIn <ExternalLink className="h-3 w-3" />
+          </span>
+        </div>
+        {/* <div className="publication-cover-thumb shrink-0 w-[72px] h-[88px] md:w-[80px] md:h-[96px] flex items-center justify-center p-2">
+          <img
+            src={ssaLogo}
+            alt=""
+            className="max-h-full max-w-full object-contain opacity-90"
+          />
+        </div> */}
+      </a>
+    </div>
+  );
+}
+
 function PublicationsPage() {
+  const [contentFilter, setContentFilter] = useState<ContentFilter>("all");
   const [page, setPage] = useState(0);
   const [activeSlug, setActiveSlug] = useState(books[0].slug);
+
+  const showPublications = contentFilter === "all" || contentFilter === "publications";
+  const showNewsletter = contentFilter === "all" || contentFilter === "newsletter";
 
   const totalPages = Math.ceil(books.length / ITEMS_PER_PAGE);
   const visibleBooks = books.slice(page * ITEMS_PER_PAGE, page * ITEMS_PER_PAGE + ITEMS_PER_PAGE);
@@ -295,59 +367,94 @@ function PublicationsPage() {
         </div>
       </section>
 
-      {/* BOOKS LIST — accordion master-detail */}
+      {/* FILTER + CONTENT */}
       <section className="bg-paper border-t border-rule/40">
         <motion.div className="mx-auto max-w-4xl px-6 lg:px-12 py-16 md:py-24">
-          <div>
-            {visibleBooks.map((book) => (
-              <BookRow
-                key={book.slug}
-                book={book}
-                isActive={activeSlug === book.slug}
-                onSelect={() => setActiveSlug(book.slug)}
-              />
+
+          <div className="flex flex-wrap items-center justify-center gap-2 mb-14 md:mb-16">
+            {contentFilters.map((f) => (
+              <button
+                key={f.key}
+                type="button"
+                onClick={() => setContentFilter(f.key)}
+                className={`px-6 py-2.5 rounded-full text-[15px] font-normal transition-colors ${
+                  contentFilter === f.key
+                    ? "bg-ink text-paper"
+                    : "text-muted-ink hover:text-ink"
+                }`}
+              >
+                {f.label}
+              </button>
             ))}
           </div>
 
-          {/* Pagination */}
-          {totalPages > 1 && (
-            <div className="mt-14 flex items-center justify-center gap-6">
-              <button
-                type="button"
-                onClick={() => setPage((p) => Math.max(0, p - 1))}
-                disabled={page === 0}
-                className="text-muted-ink hover:text-ink disabled:opacity-30 disabled:cursor-not-allowed transition"
-                aria-label="Previous page"
-              >
-                <ChevronLeft className="h-5 w-5" />
-              </button>
+          {showPublications && (
+            <div>
+              {contentFilter === "all" && (
+                <h2 className="font-display text-2xl md:text-3xl tracking-tight text-ink mb-8 md:mb-10">
+                  Publications
+                </h2>
+              )}
+              {visibleBooks.map((book) => (
+                <BookRow
+                  key={book.slug}
+                  book={book}
+                  isActive={activeSlug === book.slug}
+                  onSelect={() => setActiveSlug(book.slug)}
+                />
+              ))}
 
-              <div className="flex items-center gap-4">
-                {Array.from({ length: totalPages }).map((_, i) => (
+              {totalPages > 1 && (
+                <div className="mt-14 flex items-center justify-center gap-6">
                   <button
-                    key={i}
                     type="button"
-                    onClick={() => setPage(i)}
-                    className={`text-[15px] transition-colors ${
-                      i === page
-                        ? "font-medium text-ink"
-                        : "text-muted-ink hover:text-ink"
-                    }`}
+                    onClick={() => setPage((p) => Math.max(0, p - 1))}
+                    disabled={page === 0}
+                    className="text-muted-ink hover:text-ink disabled:opacity-30 disabled:cursor-not-allowed transition"
+                    aria-label="Previous page"
                   >
-                    {i + 1}
+                    <ChevronLeft className="h-5 w-5" />
                   </button>
-                ))}
-              </div>
 
-              <button
-                type="button"
-                onClick={() => setPage((p) => Math.min(totalPages - 1, p + 1))}
-                disabled={page === totalPages - 1}
-                className="text-muted-ink hover:text-ink disabled:opacity-30 disabled:cursor-not-allowed transition"
-                aria-label="Next page"
-              >
-                <ChevronRight className="h-5 w-5" />
-              </button>
+                  <div className="flex items-center gap-4">
+                    {Array.from({ length: totalPages }).map((_, i) => (
+                      <button
+                        key={i}
+                        type="button"
+                        onClick={() => setPage(i)}
+                        className={`text-[15px] transition-colors ${
+                          i === page
+                            ? "font-medium text-ink"
+                            : "text-muted-ink hover:text-ink"
+                        }`}
+                      >
+                        {i + 1}
+                      </button>
+                    ))}
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={() => setPage((p) => Math.min(totalPages - 1, p + 1))}
+                    disabled={page === totalPages - 1}
+                    className="text-muted-ink hover:text-ink disabled:opacity-30 disabled:cursor-not-allowed transition"
+                    aria-label="Next page"
+                  >
+                    <ChevronRight className="h-5 w-5" />
+                  </button>
+                </div>
+              )}
+            </div>
+          )}
+
+          {showNewsletter && (
+            <div className={showPublications ? "mt-20 md:mt-28 pt-20 md:pt-28 border-t border-rule/40" : ""}>
+              <h2 className="font-display text-2xl md:text-3xl tracking-tight text-ink mb-8 md:mb-10">
+                Newsletter
+              </h2>
+              {newsletters.map((item) => (
+                <NewsletterRow key={item.slug} item={item} />
+              ))}
             </div>
           )}
         </motion.div>
