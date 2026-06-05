@@ -361,7 +361,7 @@ function PublicationsPage() {
             transition={{ duration: 0.9, delay: 0.05 }}
             className="font-display text-[clamp(2.5rem,6vw,5.5rem)] leading-[1.05] tracking-tight max-w-5xl text-balance"
           >
-            Books Published By the
+          Titles by the
             <span className="block text-accent-orange font-light">Founders.</span>
           </motion.h1>
         </div>
