@@ -87,7 +87,7 @@ const leadership = [
 const advisory: { name: string; role: string; image?: string }[] = [
   { name: "Rohit Munjal", role: "Global CHRO", image: imgRohitMunjal },
   { name: "Manish Shroff", role: "Global CFO & Board Advisor", image: imgManishShroff },
-  { name: "Dr. Mahesh Kumar", role: "Senior Advocate" },
+  { name: "Dr. Mahesh Kumar", role: "Senior Advocate,\nKarnataka High Court" },
   { name: "Mansij Majumder", role: "CHRO, UNext", image: imgMansij },
   { name: "Dr. Subrata Chattopadhyay", role: "IIT-ISM", image: imgSubrata },
 ];
@@ -299,7 +299,7 @@ function AboutPage() {
                     </div>
                   )}
                   <div className="text-base font-normal tracking-tight">{a.name}</div>
-                  <div className="mt-1 text-[13px] text-muted-ink font-light leading-relaxed">
+                  <div className="mt-1 text-[13px] text-muted-ink font-light leading-relaxed whitespace-pre-line">
                     {a.role}
                   </div>
                 </motion.div>

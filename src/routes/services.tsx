@@ -89,7 +89,7 @@ const tabs: {
     intro:
       "Every register, every filing, every renewal — executed on time across jurisdictions, with multi-language statutory displays.",
     bullets: [
-      "End-to-end statutory registers ( payroll compliances and post payroll compliances )",
+      "End-to-end statutory registers (payroll compliances and post payroll compliances)",
       "EPF, ESI, PT, LWF & Gratuity administration",
       "CL(RA) licences, registrations & renewals",
       "Periodic returns, filings and renewals",

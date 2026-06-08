@@ -199,8 +199,14 @@ function Home() {
               <div className="flex flex-col gap-4 md:gap-5 flex-1">
                 {[
                   {
-                    value: "250+",
-                    label: "Acts and labour law obligations across complex regulatory environments.",
+                    value: "29 Laws",
+                    label: (
+                      <>
+                        subsumed to <span className="text-accent-orange">04</span> Labour Codes with{" "}
+                        <span className="text-accent-orange">800 +</span> Sections & Rules across
+                        complex regulatory environments.
+                      </>
+                    ),
                   },
                   {
                     value: "25+",
