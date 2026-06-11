@@ -37,43 +37,6 @@ export const Route = createFileRoute("/publications")({
 
 export const books = [
   {
-    slug: "women-in-contemporary-india",
-    title: "Women in Contemporary India",
-    author: "Dr. Amitava Ghosh & Swati Saksena Jha",
-    date: "Published March 7, 2022",
-    image: img0,
-    excerpt:
-      "Education is a foundation stone for the empowerment of women and is the dominant tool to change women's position in the world.",
-    content: `Education is a foundation stone for the empowerment of women and is the dominant tool to change women's position in the world.
-
-It is vital because they have a colossal role to play in shaping up the future of the world: its economy and society and the youth. Education is a great contributing factor in this respect. To accomplish liberation, women have to be educated and take cognizance of their human rights, constitutional rights and privileges in a modern society.
-
-India is developing as an authority as women begin playing remarkable roles for the expansion of this land with regards to its philosophy and economy.
-
-The evolution in the status of women from the past to the present is worthy of appreciation. Women are now considered to be the forces that develop a country. The economic and welfare condition of a nation is gauged by looking at how it treats its women.`,
-    buyLink:
-      "https://www.amazon.in/WOMEN-CONTEMPORARY-INDIA-Amitava-Ghosh/dp/9354464866/ref=sr_1_3?crid=3FZA4I4S8UZ0K&keywords=women+in+contemporary+India&qid=1649048930&sprefix=women+in+contemporary+india%2Caps%2C283&sr=8-3",
-  },
-  {
-    slug: "platform-economy-and-workforce",
-    title: "Platform Economy and Workforce",
-    author: "Dr. Amitava Ghosh",
-    date: "Published 2021",
-    image: img1,
-    excerpt:
-      "This book intensifies the consciousness of Industry — aggregators using apps for servicing urban and peri-urban inhabitants to avail all kind of customer services.",
-    content: `The objective of this book is to intensify the consciousness of Industry – who are aggregators and are using apps for servicing urban and peri-urban inhabitants to avail all kind of customer services. This book made an effort to catch the eye sights of the services, the providers who reaches at doorstep to deliver desired all kind of goods or services on routine daily basis.
-
-This pandemic has changed the traditional business structure for any kind and type of businesses around the globe and with this epidemic it changed the mind sets of the industry, workforce, society to adopt the new edge of digital platform economy.
-
-Platform Workers, to describe in basic linguistic, are the delivery folks and cab services who provide services at our doorstep. Platform workforce means a person engaged in platform work which means an individual working for a company which provides specific services using online platform directly to customers.
-
-The job is usually temporary and need to be completed during a specified time under a non-standard work agreement with not even one social security. The only advantage associated with such jobs it will encourage individuals in our country to engage themselves in such jobs and avail benefits arising out of it – flexibility, regular engagement with few earnings.
-
-On the other hand, platform economy will have a lesser amount of burden over the employer to not engage in traditional long term employment commitments with the employees. This new concept would help in generating several jobs which will be duly regulated by the Labour Codes and provide social security to the employees the hope of future so that the platform workforces stay protected.`,
-    buyLink: "",
-  },
-  {
     slug: "realm-of-indias-employment-law",
     title: "The Realm Of India's Employment Law",
     author: "Dr. Amitava Ghosh",
@@ -95,6 +58,62 @@ Hence, recommending this book to all readers would only be beneficial for them. 
 
 To conclude, everyone can read the book and enrich their Employment Law knowledge which is of utmost importance in today's competitive time.`,
     buyLink: "https://www.amazon.in/dp/9390586739/ref=cm_sw_r_wa_api_glt_fabc_ZQ5YRQFVY292CW7QTQZ4",
+  },
+  {
+    slug: "women-in-contemporary-india",
+    title: "Women in Contemporary India",
+    author: "Dr. Amitava Ghosh & Swati Saksena Jha",
+    date: "Published March 7, 2022",
+    image: img0,
+    excerpt:
+      "Education is a foundation stone for the empowerment of women and is the dominant tool to change women's position in the world.",
+    content: `Education is a foundation stone for the empowerment of women and is the dominant tool to change women's position in the world.
+
+It is vital because they have a colossal role to play in shaping up the future of the world: its economy and society and the youth. Education is a great contributing factor in this respect. To accomplish liberation, women have to be educated and take cognizance of their human rights, constitutional rights and privileges in a modern society.
+
+India is developing as an authority as women begin playing remarkable roles for the expansion of this land with regards to its philosophy and economy.
+
+The evolution in the status of women from the past to the present is worthy of appreciation. Women are now considered to be the forces that develop a country. The economic and welfare condition of a nation is gauged by looking at how it treats its women.`,
+    buyLink:
+      "https://www.amazon.in/WOMEN-CONTEMPORARY-INDIA-Amitava-Ghosh/dp/9354464866/ref=sr_1_3?crid=3FZA4I4S8UZ0K&keywords=women+in+contemporary+India&qid=1649048930&sprefix=women+in+contemporary+india%2Caps%2C283&sr=8-3",
+  },
+  {
+    slug: "labour-and-environmental-law-in-india",
+    title: "Labour & Environmental Law in India",
+    author: "Amitava Ghosh & Amir Jafar",
+    date: "Published January 1, 2018",
+    image: img5,
+    excerpt:
+      "One of its kind in India — focusing on application of principles, interpretation of Labour & Environmental Laws based on past judgments by various Apex Courts.",
+    content: `The commencement of Labour Laws in India can be mapped out back from 1850's when the Apprentice Act was legislated and positioned on the statute manuscript, followed by Fatal Accidents 1855, Factories Act 1881, Mines Act 1842 and series of Labour Legislations thereby. In all, above hundred labour laws & employment issues have been enacted by the Central & State Governments and prior Independence by British regime and rule, many of which have been almost modified or even repealed or replaced. Our Labour & Environmental Law book is one of its kind in India focusing on the application of the principles, interpretation of the provisions Labour & Environmental Laws and Statutes based on past judgments pronounced by various Apex Courts.
+
+This book of ours is exhaustive and covers all the legislations & principles of Labour & Environmental Laws in Indian pretext covering significant modern labour laws such as Payment of Wages Act, 1936, I D Act 1947, Social Security Acts (ESI – 1948 & EPF&MP – 1952 Acts), Maternity Benefits Act 1961, Payment of Bonus Act 1965, Payment of Gratuity Act 1972, Factories Act 1948, among others.
+
+Needless to say, this book is exceptionally comprehensive in so far as several interpretations, transcripts and approaches to issues falling under the ambit of Labour & Environmental laws which have been subjected to exhaustive critical study illustratively attached with illustration of suitable comparisons and evaluations.
+
+Ignorance of Law is no justification hence it often leads to adversity. However, the fact is, both the workforce & businesses tend to give least importance to its compliance primarily because the benefits & purpose these legislations are not properly communicated or made aware.
+
+It is, hence, crucial and critical for everyone whether be an owner, entrepreneurs, employer, manager, supervisor and every employee of any organization, to keep abreast of his/her rights and obligations under the labour and environmental laws. We are confident, this book will be of enormous assistance to HR & Personnel network, management & law students, academicians and also act as a ready reckoner/handbook for working professionals in the fields of human resources, personnel management and compliance management in every establishments.`,
+    buyLink: "https://www.amazon.in/dp/B07KYQ1KD4/ref=cm_sw_r_wa_api_glt_fabc_VBKPC0P32D5QCGGVBART",
+  },
+  {
+    slug: "platform-economy-and-workforce",
+    title: "Platform Economy and Workforce",
+    author: "Dr. Amitava Ghosh",
+    date: "Published 2021",
+    image: img1,
+    excerpt:
+      "This book intensifies the consciousness of Industry — aggregators using apps for servicing urban and peri-urban inhabitants to avail all kind of customer services.",
+    content: `The objective of this book is to intensify the consciousness of Industry – who are aggregators and are using apps for servicing urban and peri-urban inhabitants to avail all kind of customer services. This book made an effort to catch the eye sights of the services, the providers who reaches at doorstep to deliver desired all kind of goods or services on routine daily basis.
+
+This pandemic has changed the traditional business structure for any kind and type of businesses around the globe and with this epidemic it changed the mind sets of the industry, workforce, society to adopt the new edge of digital platform economy.
+
+Platform Workers, to describe in basic linguistic, are the delivery folks and cab services who provide services at our doorstep. Platform workforce means a person engaged in platform work which means an individual working for a company which provides specific services using online platform directly to customers.
+
+The job is usually temporary and need to be completed during a specified time under a non-standard work agreement with not even one social security. The only advantage associated with such jobs it will encourage individuals in our country to engage themselves in such jobs and avail benefits arising out of it – flexibility, regular engagement with few earnings.
+
+On the other hand, platform economy will have a lesser amount of burden over the employer to not engage in traditional long term employment commitments with the employees. This new concept would help in generating several jobs which will be duly regulated by the Labour Codes and provide social security to the employees the hope of future so that the platform workforces stay protected.`,
+    buyLink: "",
   },
   {
     slug: "gig-economy-in-india-rising",
@@ -149,25 +168,6 @@ Simultaneously, author also mentions the role of women in the midst of all this 
 
 Author concludes since everyone has to handle their situations on their own, this book is suggested to all as the world has changed forever.`,
     buyLink: "https://www.amazon.in/dp/939058681X/ref=cm_sw_r_wa_api_glt_fabc_1N1EVJ6Y5E23R00K5QEW",
-  },
-  {
-    slug: "labour-and-environmental-law-in-india",
-    title: "Labour & Environmental Law in India",
-    author: "Amitava Ghosh & Amir Jafar",
-    date: "Published January 1, 2018",
-    image: img5,
-    excerpt:
-      "One of its kind in India — focusing on application of principles, interpretation of Labour & Environmental Laws based on past judgments by various Apex Courts.",
-    content: `The commencement of Labour Laws in India can be mapped out back from 1850's when the Apprentice Act was legislated and positioned on the statute manuscript, followed by Fatal Accidents 1855, Factories Act 1881, Mines Act 1842 and series of Labour Legislations thereby. In all, above hundred labour laws & employment issues have been enacted by the Central & State Governments and prior Independence by British regime and rule, many of which have been almost modified or even repealed or replaced. Our Labour & Environmental Law book is one of its kind in India focusing on the application of the principles, interpretation of the provisions Labour & Environmental Laws and Statutes based on past judgments pronounced by various Apex Courts.
-
-This book of ours is exhaustive and covers all the legislations & principles of Labour & Environmental Laws in Indian pretext covering significant modern labour laws such as Payment of Wages Act, 1936, I D Act 1947, Social Security Acts (ESI – 1948 & EPF&MP – 1952 Acts), Maternity Benefits Act 1961, Payment of Bonus Act 1965, Payment of Gratuity Act 1972, Factories Act 1948, among others.
-
-Needless to say, this book is exceptionally comprehensive in so far as several interpretations, transcripts and approaches to issues falling under the ambit of Labour & Environmental laws which have been subjected to exhaustive critical study illustratively attached with illustration of suitable comparisons and evaluations.
-
-Ignorance of Law is no justification hence it often leads to adversity. However, the fact is, both the workforce & businesses tend to give least importance to its compliance primarily because the benefits & purpose these legislations are not properly communicated or made aware.
-
-It is, hence, crucial and critical for everyone whether be an owner, entrepreneurs, employer, manager, supervisor and every employee of any organization, to keep abreast of his/her rights and obligations under the labour and environmental laws. We are confident, this book will be of enormous assistance to HR & Personnel network, management & law students, academicians and also act as a ready reckoner/handbook for working professionals in the fields of human resources, personnel management and compliance management in every establishments.`,
-    buyLink: "https://www.amazon.in/dp/B07KYQ1KD4/ref=cm_sw_r_wa_api_glt_fabc_VBKPC0P32D5QCGGVBART",
   },
 ];
 
