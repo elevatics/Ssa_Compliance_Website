@@ -21,6 +21,7 @@ import imgRohitMunjal from "@/assets/advisoryboard/Rohit Munjal.jpg";
 import imgManishShroff from "@/assets/advisoryboard/manish shroff.jpeg";
 import imgMansij from "@/assets/advisoryboard/mansij.jpg";
 import imgSubrata from "@/assets/advisoryboard/subrata.jpeg";
+import imgMaheshKumar from "@/assets/advisoryboard/mahesh.jpeg";
 import { SiteHeader } from "@/components/SiteHeader";
 import { BookingDialog } from "@/components/BookingDialog";
 
@@ -87,7 +88,7 @@ const leadership = [
 const advisory: { name: string; role: string; image?: string }[] = [
   { name: "Rohit Munjal", role: "Global CHRO", image: imgRohitMunjal },
   { name: "Manish Shroff", role: "Global CFO & Board Advisor", image: imgManishShroff },
-  { name: "Dr. Mahesh Kumar", role: "Senior Advocate,\nKarnataka High Court" },
+  { name: "Dr. Mahesh Kumar", role: "Senior Advocate,\nKarnataka High Court", image:imgMaheshKumar },
   { name: "Mansij Majumder", role: "CHRO, UNext", image: imgMansij },
   { name: "Dr. Subrata Chattopadhyay", role: "IIT-ISM", image: imgSubrata },
 ];
