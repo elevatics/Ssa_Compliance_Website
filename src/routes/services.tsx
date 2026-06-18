@@ -380,7 +380,7 @@ function ServicesPage() {
                   onClick={open}
                   className="inline-flex items-center gap-2 bg-accent-orange text-paper px-8 py-3.5 rounded-full text-[15px] font-normal hover:opacity-90 transition"
                 >
-                  Book consultation
+                  Book a demo
                 </button>
               )}
             />

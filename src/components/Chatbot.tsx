@@ -39,7 +39,7 @@ const QUICK_REPLIES = [
   "What services do you offer?",
   "How does POSH compliance work?",
   "Labour law audit process?",
-  "Book a consultation",
+  "Book a demo",
 ];
 
 const WELCOME_MESSAGE =

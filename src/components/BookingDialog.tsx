@@ -1,46 +1,62 @@
 import { useEffect, useState, type ReactNode, type FormEvent } from "react";
 import { createPortal } from "react-dom";
-import { X, CheckCircle2, Loader2, Mail, Phone, Building2, Briefcase, MessageSquare, User } from "lucide-react";
+import {
+  X,
+  CheckCircle2,
+  Loader2,
+  Mail,
+  Phone,
+  Building2,
+  Briefcase,
+  MessageSquare,
+  User,
+  MapPin,
+} from "lucide-react";
+import {
+  registerBookDemoUser,
+  resendBookDemoOTP,
+  verifyBookDemoOTP,
+} from "@/lib/bookDemoApi";
+import { OtpVerificationPopup } from "./OtpVerificationPopup";
 
 type BookingDialogProps = {
   trigger: (open: () => void) => ReactNode;
 };
 
 type FormState = {
-  fullName: string;
+  name: string;
   email: string;
-  contactNumber: string;
+  mobile: string;
   companyName: string;
-  industry: string;
-  remarks: string;
+  designation: string;
+  location: string;
+  enquiryInfo: string;
+  howYouHearAboutUs: string;
+  message: string;
 };
-
-const INDUSTRIES = [
-  "Manufacturing",
-  "Information Technology",
-  "Banking & Financial Services",
-  "Healthcare & Pharmaceuticals",
-  "Retail & E-commerce",
-  "Logistics & Supply Chain",
-  "Real Estate & Construction",
-  "Hospitality & Tourism",
-  "Education",
-  "Automobile",
-  "Telecom",
-  "Energy & Infrastructure",
-  "FMCG",
-  "Consulting & Professional Services",
-  "Other",
-];
 
 const EMPTY: FormState = {
-  fullName: "",
+  name: "",
   email: "",
-  contactNumber: "",
+  mobile: "",
   companyName: "",
-  industry: "",
-  remarks: "",
+  designation: "",
+  location: "",
+  enquiryInfo: "",
+  howYouHearAboutUs: "",
+  message: "",
 };
+
+const ENQUIRY_OPTIONS = ["Compliance", "Advisory", "Training"] as const;
+
+const HEAR_ABOUT_OPTIONS = [
+  "Google",
+  "LinkedIn",
+  "Referral",
+  "Social Media",
+  "Advertisement",
+  "Other",
+] as const;
 
 function FieldIcon({ children }: { children: ReactNode }) {
   return (
@@ -55,10 +71,16 @@ export function BookingDialog({ trigger }: BookingDialogProps) {
   const [form, setForm] = useState<FormState>(EMPTY);
   const [submitted, setSubmitted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState("");
+  const [acceptedTerms, setAcceptedTerms] = useState(false);
+  const [otpPopupOpen, setOtpPopupOpen] = useState(false);
+  const [pendingEmail, setPendingEmail] = useState("");
 
   useEffect(() => {
     if (!open) return;
-    const onKey = (e: KeyboardEvent) => e.key === "Escape" && handleClose();
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape" && !otpPopupOpen) handleClose();
+    };
     document.addEventListener("keydown", onKey);
     const prev = document.body.style.overflow;
     document.body.style.overflow = "hidden";
@@ -66,26 +88,71 @@ export function BookingDialog({ trigger }: BookingDialogProps) {
       document.removeEventListener("keydown", onKey);
       document.body.style.overflow = prev;
     };
-  }, [open]);
+  }, [open, otpPopupOpen]);
+
+  const resetState = () => {
+    setForm(EMPTY);
+    setSubmitted(false);
+    setError("");
+    setAcceptedTerms(false);
+    setOtpPopupOpen(false);
+    setPendingEmail("");
+  };
 
   const handleClose = () => {
     setOpen(false);
-    setTimeout(() => {
-      setSubmitted(false);
-      setForm(EMPTY);
-    }, 400);
+    setTimeout(resetState, 400);
   };
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
-  ) => setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>,
+  ) => {
+    setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+    setError("");
+  };
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
+    setError("");
+
+    if (!acceptedTerms) {
+      setError("Please accept the Privacy Policy & Terms to continue");
+      return;
+    }
+
     setSubmitting(true);
-    await new Promise((r) => setTimeout(r, 1400));
-    setSubmitting(false);
-    setSubmitted(true);
+    try {
+      const response = await registerBookDemoUser(form);
+
+      if (response.success) {
+        setPendingEmail(form.email);
+        setOtpPopupOpen(true);
+      } else {
+        setError(response.error || "Registration failed. Please try again.");
+      }
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "An error occurred during registration.");
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  const handleOtpVerify = async (otp: number) => {
+    const response = await verifyBookDemoOTP({ email: pendingEmail, otp });
+
+    if (response.success) {
+      setOtpPopupOpen(false);
+      setSubmitted(true);
+    } else {
+      throw new Error(response.error || "OTP verification failed");
+    }
+  };
+
+  const handleResendOtp = async () => {
+    const response = await resendBookDemoOTP(pendingEmail);
+    if (!response.success) {
+      throw new Error(response.error || "Failed to resend OTP");
+    }
   };
 
   const modal = open
@@ -93,11 +160,10 @@ export function BookingDialog({ trigger }: BookingDialogProps) {
         <div
           role="dialog"
           aria-modal="true"
-          aria-label="Book a consultation"
+          aria-label="Book a demo"
           style={{ zIndex: 99999 }}
           className="fixed inset-0 flex items-center justify-center p-4 md:p-6"
         >
-          {/* Backdrop */}
           <button
             type="button"
             aria-label="Close"
@@ -105,11 +171,10 @@ export function BookingDialog({ trigger }: BookingDialogProps) {
             className="absolute inset-0 bg-ink/60 backdrop-blur-md"
           />
 
-          {/* Dialog panel */}
-          <div className="relative w-full max-w-2xl bg-paper rounded-3xl shadow-2xl border border-rule/40 flex flex-col overflow-hidden"
-               style={{ maxHeight: "calc(100vh - 2rem)" }}>
-
-            {/* Header band */}
+          <div
+            className="relative w-full max-w-2xl bg-paper rounded-3xl shadow-2xl border border-rule/40 flex flex-col overflow-hidden"
+            style={{ maxHeight: "calc(100vh - 2rem)" }}
+          >
             <div className="relative bg-ink text-paper px-8 py-7 shrink-0 overflow-hidden">
               <div className="absolute -top-16 -right-16 h-48 w-48 rounded-full bg-accent-blue/20 blur-2xl" />
               <div className="absolute -bottom-10 left-0 h-32 w-32 rounded-full bg-accent-orange/15 blur-2xl" />
@@ -119,10 +184,10 @@ export function BookingDialog({ trigger }: BookingDialogProps) {
                     SSA Compliance Services LLP
                   </div>
                   <h2 className="font-display text-2xl md:text-3xl tracking-tight leading-snug">
-                    Book a Consultation
+                    Book a Demo
                   </h2>
                   <p className="mt-1.5 text-[13px] text-paper/60 font-light">
-                    Our experts will reach out within 24 hours.
+                    Drop your details and we&apos;ll connect with you shortly.
                   </p>
                 </div>
                 <button
@@ -136,7 +201,6 @@ export function BookingDialog({ trigger }: BookingDialogProps) {
               </div>
             </div>
 
-            {/* Body */}
             <div className="overflow-y-auto flex-1">
               {submitted ? (
                 <div className="flex flex-col items-center justify-center py-16 px-8 text-center gap-5">
@@ -144,14 +208,10 @@ export function BookingDialog({ trigger }: BookingDialogProps) {
                     <CheckCircle2 className="h-10 w-10 text-accent-blue stroke-[1.5]" />
                   </div>
                   <div>
-                    <h3 className="font-display text-2xl tracking-tight mb-2">
-                      Request Submitted!
-                    </h3>
+                    <h3 className="font-display text-2xl tracking-tight mb-2">Demo Scheduled!</h3>
                     <p className="text-[14px] text-muted-ink font-light leading-relaxed max-w-sm mx-auto">
-                      Thank you,{" "}
-                      <span className="text-ink font-normal">{form.fullName}</span>. Our team will
-                      reach out at{" "}
-                      <span className="text-ink font-normal">{form.email}</span> within 24 hours.
+                      Demo will be scheduled soon. We will notify you via email at{" "}
+                      <span className="text-ink font-normal">{form.email}</span>.
                     </p>
                   </div>
                   <button
@@ -164,47 +224,78 @@ export function BookingDialog({ trigger }: BookingDialogProps) {
                 </div>
               ) : (
                 <form onSubmit={handleSubmit} className="px-8 py-7 space-y-4">
-                  {/* Full Name */}
+                  {error && (
+                    <div className="p-3 bg-red-50 border border-red-200 rounded-xl text-red-700 text-sm text-center">
+                      {error}
+                    </div>
+                  )}
+
                   <div className="space-y-1.5">
-                    <label htmlFor="fullName" className="block text-[12px] font-normal text-muted-ink uppercase tracking-wider">
-                      Full Name <span className="text-accent-orange">*</span>
+                    <label
+                      htmlFor="name"
+                      className="block text-[12px] font-normal text-muted-ink uppercase tracking-wider"
+                    >
+                      Name <span className="text-accent-orange">*</span>
                     </label>
                     <div className="relative">
-                      <FieldIcon><User className="h-4 w-4" /></FieldIcon>
+                      <FieldIcon>
+                        <User className="h-4 w-4" />
+                      </FieldIcon>
                       <input
-                        id="fullName" name="fullName" type="text" required
-                        value={form.fullName} onChange={handleChange}
+                        id="name"
+                        name="name"
+                        type="text"
+                        required
+                        value={form.name}
+                        onChange={handleChange}
                         placeholder="Your full name"
                         className="w-full h-11 pl-10 pr-4 rounded-xl border border-rule bg-bone/40 text-[14px] text-ink placeholder:text-muted-ink/40 focus:outline-none focus:ring-2 focus:ring-accent-blue/25 focus:border-accent-blue/50 transition"
                       />
                     </div>
                   </div>
 
-                  {/* Email + Phone */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div className="space-y-1.5">
-                      <label htmlFor="email" className="block text-[12px] font-normal text-muted-ink uppercase tracking-wider">
-                        Email Address <span className="text-accent-orange">*</span>
+                      <label
+                        htmlFor="email"
+                        className="block text-[12px] font-normal text-muted-ink uppercase tracking-wider"
+                      >
+                        Corporate Email <span className="text-accent-orange">*</span>
                       </label>
                       <div className="relative">
-                        <FieldIcon><Mail className="h-4 w-4" /></FieldIcon>
+                        <FieldIcon>
+                          <Mail className="h-4 w-4" />
+                        </FieldIcon>
                         <input
-                          id="email" name="email" type="email" required
-                          value={form.email} onChange={handleChange}
+                          id="email"
+                          name="email"
+                          type="email"
+                          required
+                          value={form.email}
+                          onChange={handleChange}
                           placeholder="you@company.com"
                           className="w-full h-11 pl-10 pr-4 rounded-xl border border-rule bg-bone/40 text-[14px] text-ink placeholder:text-muted-ink/40 focus:outline-none focus:ring-2 focus:ring-accent-blue/25 focus:border-accent-blue/50 transition"
                         />
                       </div>
                     </div>
                     <div className="space-y-1.5">
-                      <label htmlFor="contactNumber" className="block text-[12px] font-normal text-muted-ink uppercase tracking-wider">
-                        Contact Number <span className="text-accent-orange">*</span>
+                      <label
+                        htmlFor="mobile"
+                        className="block text-[12px] font-normal text-muted-ink uppercase tracking-wider"
+                      >
+                        Contact No. <span className="text-accent-orange">*</span>
                       </label>
                       <div className="relative">
-                        <FieldIcon><Phone className="h-4 w-4" /></FieldIcon>
+                        <FieldIcon>
+                          <Phone className="h-4 w-4" />
+                        </FieldIcon>
                         <input
-                          id="contactNumber" name="contactNumber" type="tel" required
-                          value={form.contactNumber} onChange={handleChange}
+                          id="mobile"
+                          name="mobile"
+                          type="tel"
+                          required
+                          value={form.mobile}
+                          onChange={handleChange}
                           placeholder="+91 98765 43210"
                           className="w-full h-11 pl-10 pr-4 rounded-xl border border-rule bg-bone/40 text-[14px] text-ink placeholder:text-muted-ink/40 focus:outline-none focus:ring-2 focus:ring-accent-blue/25 focus:border-accent-blue/50 transition"
                         />
@@ -212,64 +303,174 @@ export function BookingDialog({ trigger }: BookingDialogProps) {
                     </div>
                   </div>
 
-                  {/* Company + Industry */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div className="space-y-1.5">
-                      <label htmlFor="companyName" className="block text-[12px] font-normal text-muted-ink uppercase tracking-wider">
+                      <label
+                        htmlFor="companyName"
+                        className="block text-[12px] font-normal text-muted-ink uppercase tracking-wider"
+                      >
                         Company Name <span className="text-accent-orange">*</span>
                       </label>
                       <div className="relative">
-                        <FieldIcon><Building2 className="h-4 w-4" /></FieldIcon>
+                        <FieldIcon>
+                          <Building2 className="h-4 w-4" />
+                        </FieldIcon>
                         <input
-                          id="companyName" name="companyName" type="text" required
-                          value={form.companyName} onChange={handleChange}
+                          id="companyName"
+                          name="companyName"
+                          type="text"
+                          required
+                          value={form.companyName}
+                          onChange={handleChange}
                           placeholder="Your company"
                           className="w-full h-11 pl-10 pr-4 rounded-xl border border-rule bg-bone/40 text-[14px] text-ink placeholder:text-muted-ink/40 focus:outline-none focus:ring-2 focus:ring-accent-blue/25 focus:border-accent-blue/50 transition"
                         />
                       </div>
                     </div>
                     <div className="space-y-1.5">
-                      <label htmlFor="industry" className="block text-[12px] font-normal text-muted-ink uppercase tracking-wider">
-                        Industry <span className="text-accent-orange">*</span>
+                      <label
+                        htmlFor="designation"
+                        className="block text-[12px] font-normal text-muted-ink uppercase tracking-wider"
+                      >
+                        Designation <span className="text-accent-orange">*</span>
                       </label>
                       <div className="relative">
-                        <FieldIcon><Briefcase className="h-4 w-4" /></FieldIcon>
+                        <FieldIcon>
+                          <Briefcase className="h-4 w-4" />
+                        </FieldIcon>
+                        <input
+                          id="designation"
+                          name="designation"
+                          type="text"
+                          required
+                          value={form.designation}
+                          onChange={handleChange}
+                          placeholder="Your role"
+                          className="w-full h-11 pl-10 pr-4 rounded-xl border border-rule bg-bone/40 text-[14px] text-ink placeholder:text-muted-ink/40 focus:outline-none focus:ring-2 focus:ring-accent-blue/25 focus:border-accent-blue/50 transition"
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div className="space-y-1.5">
+                      <label
+                        htmlFor="location"
+                        className="block text-[12px] font-normal text-muted-ink uppercase tracking-wider"
+                      >
+                        Location / City / State <span className="text-accent-orange">*</span>
+                      </label>
+                      <div className="relative">
+                        <FieldIcon>
+                          <MapPin className="h-4 w-4" />
+                        </FieldIcon>
+                        <input
+                          id="location"
+                          name="location"
+                          type="text"
+                          required
+                          value={form.location}
+                          onChange={handleChange}
+                          placeholder="City, State"
+                          className="w-full h-11 pl-10 pr-4 rounded-xl border border-rule bg-bone/40 text-[14px] text-ink placeholder:text-muted-ink/40 focus:outline-none focus:ring-2 focus:ring-accent-blue/25 focus:border-accent-blue/50 transition"
+                        />
+                      </div>
+                    </div>
+                    <div className="space-y-1.5">
+                      <label
+                        htmlFor="enquiryInfo"
+                        className="block text-[12px] font-normal text-muted-ink uppercase tracking-wider"
+                      >
+                        Enquiry For <span className="text-accent-orange">*</span>
+                      </label>
+                      <div className="relative">
+                        <FieldIcon>
+                          <Briefcase className="h-4 w-4" />
+                        </FieldIcon>
                         <select
-                          id="industry" name="industry" required
-                          value={form.industry} onChange={handleChange}
+                          id="enquiryInfo"
+                          name="enquiryInfo"
+                          required
+                          value={form.enquiryInfo}
+                          onChange={handleChange}
                           className="w-full h-11 pl-10 pr-4 rounded-xl border border-rule bg-bone/40 text-[14px] text-ink focus:outline-none focus:ring-2 focus:ring-accent-blue/25 focus:border-accent-blue/50 transition appearance-none cursor-pointer"
                         >
-                          <option value="" disabled>Select industry</option>
-                          {INDUSTRIES.map((ind) => (
-                            <option key={ind} value={ind}>{ind}</option>
+                          <option value="" disabled>
+                            Select enquiry type
+                          </option>
+                          {ENQUIRY_OPTIONS.map((opt) => (
+                            <option key={opt} value={opt}>
+                              {opt}
+                            </option>
                           ))}
                         </select>
                       </div>
                     </div>
                   </div>
 
-                  {/* Remarks */}
                   <div className="space-y-1.5">
-                    <label htmlFor="remarks" className="block text-[12px] font-normal text-muted-ink uppercase tracking-wider">
-                      Remarks
+                    <label
+                      htmlFor="howYouHearAboutUs"
+                      className="block text-[12px] font-normal text-muted-ink uppercase tracking-wider"
+                    >
+                      How did you hear about us? <span className="text-accent-orange">*</span>
+                    </label>
+                    <select
+                      id="howYouHearAboutUs"
+                      name="howYouHearAboutUs"
+                      required
+                      value={form.howYouHearAboutUs}
+                      onChange={handleChange}
+                      className="w-full h-11 px-4 rounded-xl border border-rule bg-bone/40 text-[14px] text-ink focus:outline-none focus:ring-2 focus:ring-accent-blue/25 focus:border-accent-blue/50 transition appearance-none cursor-pointer"
+                    >
+                      <option value="" disabled>
+                        Select an option
+                      </option>
+                      {HEAR_ABOUT_OPTIONS.map((opt) => (
+                        <option key={opt} value={opt}>
+                          {opt}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  <div className="space-y-1.5">
+                    <label
+                      htmlFor="message"
+                      className="block text-[12px] font-normal text-muted-ink uppercase tracking-wider"
+                    >
+                      Your Message <span className="text-accent-orange">*</span>
                     </label>
                     <div className="relative">
                       <span className="absolute left-3.5 top-3.5 text-muted-ink/50 pointer-events-none">
                         <MessageSquare className="h-4 w-4" />
                       </span>
                       <textarea
-                        id="remarks" name="remarks" rows={3}
-                        value={form.remarks} onChange={handleChange}
-                        placeholder="Tell us about your compliance needs or any specific questions…"
+                        id="message"
+                        name="message"
+                        rows={3}
+                        required
+                        value={form.message}
+                        onChange={handleChange}
+                        placeholder="Tell us about your compliance needs…"
                         className="w-full pl-10 pr-4 py-3 rounded-xl border border-rule bg-bone/40 text-[14px] text-ink placeholder:text-muted-ink/40 focus:outline-none focus:ring-2 focus:ring-accent-blue/25 focus:border-accent-blue/50 transition resize-none"
                       />
                     </div>
                   </div>
 
-                  {/* Divider */}
                   <div className="h-px bg-rule/60" />
 
-                  {/* Submit */}
+                  <label className="flex items-start gap-2.5 text-[13px] text-muted-ink font-light cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={acceptedTerms}
+                      onChange={(e) => setAcceptedTerms(e.target.checked)}
+                      className="mt-0.5 h-4 w-4 rounded border-rule accent-ink"
+                      required
+                    />
+                    <span>I accept the Privacy Policy &amp; Terms.</span>
+                  </label>
+
                   <button
                     type="submit"
                     disabled={submitting}
@@ -281,19 +482,28 @@ export function BookingDialog({ trigger }: BookingDialogProps) {
                         Submitting…
                       </>
                     ) : (
-                      "Submit Request"
+                      "Submit"
                     )}
                   </button>
 
                   <p className="text-[11px] text-muted-ink/60 text-center font-light">
-                    Your information is kept strictly confidential and never shared with third parties.
+                    Your information is kept strictly confidential and never shared with third
+                    parties.
                   </p>
                 </form>
               )}
             </div>
           </div>
+
+          <OtpVerificationPopup
+            isOpen={otpPopupOpen}
+            email={pendingEmail}
+            onClose={() => setOtpPopupOpen(false)}
+            onVerify={handleOtpVerify}
+            onResend={handleResendOtp}
+          />
         </div>,
-        document.body
+        document.body,
       )
     : null;
 

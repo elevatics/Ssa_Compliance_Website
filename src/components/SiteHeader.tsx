@@ -51,7 +51,7 @@ export function SiteHeader() {
                 onClick={openDialog}
                 className="hidden sm:inline-flex items-center gap-1.5 text-base font-normal text-paper bg-ink px-5 py-2.5 rounded-full hover:bg-accent-blue transition"
               >
-                Book a Consultation
+                Book a Demo
               </button>
             )}
           />
@@ -91,7 +91,7 @@ export function SiteHeader() {
                   }}
                   className="inline-flex w-fit items-center gap-1.5 text-base text-paper bg-ink px-5 py-2.5 rounded-full"
                 >
-                  Book a Consultation
+                  Book a Demo
                 </button>
               )}
             />
