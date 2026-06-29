@@ -39,20 +39,31 @@ const clients = Object.entries(clientLogoModules)
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Labour Law Compliance India | Employment Law Advisory | SSA Compliance" },
+      { title: "SSA Compliance Services LLP | Labour Law Compliance & HR Compliance Services India" },
       {
         name: "description",
         content:
-          "India's leading employment & labour law advisory firm delivering Pan-India statutory compliance, audits, POSH training and risk mitigation for enterprises.",
+          "Expert labour law compliance, employment law compliance, HR compliances, statutory compliance in HR, POSH compliance, and payroll compliance solutions for businesses across India.",
       },
-      { property: "og:title", content: "Labour Law Compliance India | SSA Compliance" },
+      {
+        name: "keywords",
+        content:
+          "labor law compliance, labour law compliance India, employment law compliance, HR compliances, human resources compliance, statutory compliance in HR, labour law consultant India, HR compliance services India, POSH compliance India",
+      },
+      { name: "robots", content: "index, follow" },
+      { property: "og:title", content: "SSA Compliance Services LLP | Labour Law Compliance & HR Compliance Services India" },
       {
         property: "og:description",
         content:
-          "Pan-India statutory compliance, audits, POSH training and risk mitigation for enterprises.",
+          "Expert labour law compliance, employment law compliance, HR compliance services, and statutory compliance solutions for businesses across India.",
       },
-      { property: "og:image", content: heroBg },
+      { property: "og:type", content: "website" },
+      { property: "og:url", content: "https://www.ssahrc.com/" },
+      { property: "og:image", content: "https://www.ssahrc.com/og-image.jpg" },
       { name: "twitter:image", content: heroBg },
+    ],
+    links: [
+      { rel: "canonical", href: "https://www.ssahrc.com/" },
     ],
     scripts: [
       {
