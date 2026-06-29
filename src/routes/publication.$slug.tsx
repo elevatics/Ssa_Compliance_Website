@@ -9,13 +9,26 @@ import { useState } from "react";
 export const Route = createFileRoute("/publication/$slug")({
   head: ({ params }) => {
     const book = books.find((b) => b.slug === params.slug);
+    const canonicalUrl = `https://www.ssahrc.com/publication/${params.slug}`;
     return {
       meta: [
-        { title: book ? `${book.title} — SSA Compliance` : "Publication — SSA Compliance" },
+        { title: book ? `${book.title} | Labour Law Publication — SSA Compliance` : "Publication — SSA Compliance" },
         {
           name: "description",
-          content: book?.excerpt ?? "SSA Compliance publication.",
+          content: book?.excerpt ?? "SSA Compliance publication on labour law and employment law in India.",
         },
+        { name: "robots", content: "index, follow" },
+        { property: "og:title", content: book ? `${book.title} — SSA Compliance` : "Publication — SSA Compliance" },
+        {
+          property: "og:description",
+          content: book?.excerpt ?? "SSA Compliance publication on labour law and employment law in India.",
+        },
+        { property: "og:type", content: "article" },
+        { property: "og:url", content: canonicalUrl },
+        { property: "og:image", content: "https://www.ssahrc.com/og-image.jpg" },
+      ],
+      links: [
+        { rel: "canonical", href: canonicalUrl },
       ],
     };
   },

@@ -28,20 +28,31 @@ import { BookingDialog } from "@/components/BookingDialog";
 export const Route = createFileRoute("/about")({
   head: () => ({
     meta: [
-      { title: "About SSA Compliance — India's Premier Employment & Labour Law Advisory" },
+      { title: "About SSA Compliance Services LLP | Labour Law & HR Compliance Specialists" },
       {
         name: "description",
         content:
-          "Meet SSA Compliance Services LLP — 25+ years of front-line employment law expertise, led by a senior team of co-founders and an advisory Board of CHROs, CFOs and senior counsel.",
+          "SSA Compliance Services LLP is a trusted labour law compliance and employment law advisory firm helping organisations manage HR compliances, statutory compliance, audits, and workplace compliance across India.",
       },
+      {
+        name: "keywords",
+        content:
+          "SSA Compliance Services LLP, labour law consultant India, employment law compliance, human resources compliance, HR compliances, statutory compliance in HR, labour law advisory India",
+      },
+      { name: "robots", content: "index, follow" },
       { property: "og:title", content: "About SSA Compliance Services LLP" },
       {
         property: "og:description",
         content:
-          "India's premier employment and labour law advisory. Meet our leadership and advisory Board.",
+          "Trusted labour law, employment law, HR compliance, and statutory compliance advisory firm serving businesses across India.",
       },
-      { property: "og:image", content: aboutBg },
+      { property: "og:type", content: "website" },
+      { property: "og:url", content: "https://www.ssahrc.com/about" },
+      { property: "og:image", content: "https://www.ssahrc.com/og-image.jpg" },
       { name: "twitter:image", content: aboutBg },
+    ],
+    links: [
+      { rel: "canonical", href: "https://www.ssahrc.com/about" },
     ],
   }),
   component: AboutPage,

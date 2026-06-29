@@ -18,18 +18,30 @@ import { BookingDialog } from "@/components/BookingDialog";
 export const Route = createFileRoute("/insights")({
   head: () => ({
     meta: [
-      { title: "Insights & Expertise — Thought Leadership in Employment Law | SSA Compliance" },
+      { title: "Labour Law Updates, HR Compliance Insights & Employment Law Articles" },
       {
         name: "description",
         content:
-          "Publications, research and capability briefs on India's employment and labour law — by SSA Compliance Services LLP.",
+          "Stay updated with the latest labour law compliance updates, employment law developments, HR compliance insights, statutory changes, and workplace compliance trends in India.",
       },
-      { property: "og:title", content: "Thought Leadership in Employment Law" },
+      {
+        name: "keywords",
+        content:
+          "labour law updates India, employment law compliance, HR compliance insights, labour law compliance India, statutory compliance in HR, labour law news India, workplace compliance updates",
+      },
+      { name: "robots", content: "index, follow" },
+      { property: "og:title", content: "Labour Law Updates & HR Compliance Insights" },
       {
         property: "og:description",
         content:
-          "Download research and briefings from SSA Compliance on India's evolving labour and employment landscape.",
+          "Latest labour law updates, employment law developments, HR compliance insights, and statutory compliance news.",
       },
+      { property: "og:type", content: "website" },
+      { property: "og:url", content: "https://www.ssahrc.com/insights" },
+      { property: "og:image", content: "https://www.ssahrc.com/og-image.jpg" },
+    ],
+    links: [
+      { rel: "canonical", href: "https://www.ssahrc.com/insights" },
     ],
   }),
   component: InsightsPage,

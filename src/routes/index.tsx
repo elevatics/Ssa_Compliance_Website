@@ -48,7 +48,7 @@ export const Route = createFileRoute("/")({
       {
         name: "keywords",
         content:
-          "labor law compliance, labour law compliance India, employment law compliance, HR compliances, human resources compliance, statutory compliance in HR, labour law consultant India, HR compliance services India, POSH compliance India",
+          "labor law compliance, employment law compliance, HR compliances, human resources compliance, statutory compliance in HR, labor law, labour law compliance India, employment law advisory India, labour law audit India, POSH compliance India, payroll compliance India, labour law consultant India, HR compliance services India, new labour codes India",
       },
       { name: "robots", content: "index, follow" },
       { property: "og:title", content: "SSA Compliance Services LLP | Labour Law Compliance & HR Compliance Services India" },

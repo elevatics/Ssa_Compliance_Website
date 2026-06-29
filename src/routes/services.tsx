@@ -24,18 +24,30 @@ import { BookingDialog } from "@/components/BookingDialog";
 export const Route = createFileRoute("/services")({
   head: () => ({
     meta: [
-      { title: "Services — Comprehensive Labour Law Compliance India | SSA Compliance" },
+      { title: "Labour Law Compliance, Employment Law & HR Compliance Services India" },
       {
         name: "description",
         content:
-          "Advisory, audits, statutory records and POSH compliance — end-to-end labour law services for enterprises across India, Southeast Asia and the Middle East.",
+          "Comprehensive labour law compliance, employment law compliance, HR compliance services, statutory compliance, POSH compliance, payroll compliance, audits, and advisory services across India.",
       },
-      { property: "og:title", content: "Comprehensive Labour Law Compliance Services" },
+      {
+        name: "keywords",
+        content:
+          "labour law compliance India, employment law compliance, HR compliance services India, human resources compliance, statutory compliance in HR, labour law audit India, POSH compliance India, payroll compliance India",
+      },
+      { name: "robots", content: "index, follow" },
+      { property: "og:title", content: "Labour Law Compliance & HR Compliance Services India" },
       {
         property: "og:description",
         content:
-          "Strategic advisory, pan-India audits, statutory records and POSH compliance — by SSA Compliance Services LLP.",
+          "End-to-end labour law, employment law, HR compliance, statutory compliance, payroll, and POSH advisory services.",
       },
+      { property: "og:type", content: "website" },
+      { property: "og:url", content: "https://www.ssahrc.com/services" },
+      { property: "og:image", content: "https://www.ssahrc.com/og-image.jpg" },
+    ],
+    links: [
+      { rel: "canonical", href: "https://www.ssahrc.com/services" },
     ],
   }),
   component: ServicesPage,

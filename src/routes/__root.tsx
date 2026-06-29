@@ -1,4 +1,4 @@
-import { Outlet, Link, createRootRoute } from "@tanstack/react-router";
+import { Outlet, Link, createRootRoute, HeadContent } from "@tanstack/react-router";
 import { Chatbot } from "@/components/Chatbot";
 import { SubscriptionPopup } from "@/components/SubscriptionPopup";
 
@@ -32,6 +32,7 @@ export const Route = createRootRoute({
 function RootComponent() {
   return (
     <>
+      <HeadContent />
       <Outlet />
       <Chatbot />
       <SubscriptionPopup />

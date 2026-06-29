@@ -18,18 +18,30 @@ import img5 from "@/assets/image (5).png";
 export const Route = createFileRoute("/publications")({
   head: () => ({
     meta: [
-      { title: "Publications — SSA Compliance Services LLP" },
+      { title: "Labour Law Publications, Compliance Guides & Employment Law Resources" },
       {
         name: "description",
         content:
-          "Explore SSA Compliance's published books on employment law, gig economy, platform workforce, women in India and more.",
+          "Access labour law publications, compliance newsletters, employment law resources, HR compliance guides, statutory compliance updates, and industry insights from SSA Compliance Services LLP.",
       },
-      { property: "og:title", content: "Publications — SSA Compliance Services LLP" },
+      {
+        name: "keywords",
+        content:
+          "labour law publications India, employment law resources, HR compliance guides, statutory compliance updates, labour law newsletter India, compliance management resources, workplace compliance publications",
+      },
+      { name: "robots", content: "index, follow" },
+      { property: "og:title", content: "Labour Law Publications & Compliance Resources" },
       {
         property: "og:description",
         content:
-          "Six authoritative books on India's labour law, workforce policy and compliance landscape by SSA Compliance Services LLP.",
+          "Compliance newsletters, labour law publications, HR compliance guides, and employment law resources.",
       },
+      { property: "og:type", content: "website" },
+      { property: "og:url", content: "https://www.ssahrc.com/publications" },
+      { property: "og:image", content: "https://www.ssahrc.com/og-image.jpg" },
+    ],
+    links: [
+      { rel: "canonical", href: "https://www.ssahrc.com/publications" },
     ],
   }),
   component: PublicationsPage,

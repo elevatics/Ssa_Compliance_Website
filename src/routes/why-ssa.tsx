@@ -26,18 +26,30 @@ import { BookingDialog } from "@/components/BookingDialog";
 export const Route = createFileRoute("/why-ssa")({
   head: () => ({
     meta: [
-      { title: "Why SSA — The SSA Advantage in Labour Law Compliance | SSA Compliance" },
+      { title: "Why SSA Compliance Services LLP | Trusted Labour Law Compliance Experts" },
       {
         name: "description",
         content:
-          "One-stop advisory to execution, expert statutory interpretation and guaranteed service levels — the case for choosing SSA Compliance Services LLP.",
+          "Discover why businesses across India trust SSA Compliance Services LLP for labour law compliance, employment law advisory, HR compliance, audits, and statutory compliance management.",
       },
-      { property: "og:title", content: "Why SSA — One-Stop Labour Law Compliance Partner" },
+      {
+        name: "keywords",
+        content:
+          "labour law consultant India, employment law compliance, HR compliances, statutory compliance in HR, labour law advisory firm India, human resources compliance, compliance management services India",
+      },
+      { name: "robots", content: "index, follow" },
+      { property: "og:title", content: "Why SSA Compliance Services LLP" },
       {
         property: "og:description",
         content:
-          "Advisory to execution under one roof, 25+ years of expert interpretation, and transparent service levels.",
+          "Trusted partner for labour law compliance, employment law advisory, HR compliance, and statutory compliance services.",
       },
+      { property: "og:type", content: "website" },
+      { property: "og:url", content: "https://www.ssahrc.com/why-ssa" },
+      { property: "og:image", content: "https://www.ssahrc.com/og-image.jpg" },
+    ],
+    links: [
+      { rel: "canonical", href: "https://www.ssahrc.com/why-ssa" },
     ],
     scripts: [
       {
