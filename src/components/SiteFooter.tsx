@@ -135,7 +135,16 @@ export function SiteFooter() {
       {/* Copyright */}
       <div className="border-t border-white/10">
         <div className="mx-auto max-w-7xl px-6 lg:px-12 py-4">
-          <p className="text-center text-[12px] text-white/55">
+          <p className="text-center text-[12px] text-white/70">
+            <Link to="/privacy" className="hover:text-white transition">
+              Privacy Notice
+            </Link>
+            <span className="mx-2 text-white/35">·</span>
+            <Link to="/terms" className="hover:text-white transition">
+              Terms of Service
+            </Link>
+          </p>
+          <p className="mt-2 text-center text-[12px] text-white/55">
             © all rights reserved – SSA COMPLIANCE SERVICES LLP.
           </p>
         </div>

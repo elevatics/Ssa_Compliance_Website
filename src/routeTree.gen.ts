@@ -10,9 +10,11 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as WhySsaRouteImport } from './routes/why-ssa'
+import { Route as TermsRouteImport } from './routes/terms'
 import { Route as ServicesRouteImport } from './routes/services'
 import { Route as PublicationsRouteImport } from './routes/publications'
 import { Route as ProductsRouteImport } from './routes/products'
+import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as InsightsRouteImport } from './routes/insights'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
@@ -21,6 +23,11 @@ import { Route as PublicationSlugRouteImport } from './routes/publication.$slug'
 const WhySsaRoute = WhySsaRouteImport.update({
   id: '/why-ssa',
   path: '/why-ssa',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TermsRoute = TermsRouteImport.update({
+  id: '/terms',
+  path: '/terms',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ServicesRoute = ServicesRouteImport.update({
@@ -36,6 +43,11 @@ const PublicationsRoute = PublicationsRouteImport.update({
 const ProductsRoute = ProductsRouteImport.update({
   id: '/products',
   path: '/products',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PrivacyRoute = PrivacyRouteImport.update({
+  id: '/privacy',
+  path: '/privacy',
   getParentRoute: () => rootRouteImport,
 } as any)
 const InsightsRoute = InsightsRouteImport.update({
@@ -63,9 +75,11 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/insights': typeof InsightsRoute
+  '/privacy': typeof PrivacyRoute
   '/products': typeof ProductsRoute
   '/publications': typeof PublicationsRoute
   '/services': typeof ServicesRoute
+  '/terms': typeof TermsRoute
   '/why-ssa': typeof WhySsaRoute
   '/publication/$slug': typeof PublicationSlugRoute
 }
@@ -73,9 +87,11 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/insights': typeof InsightsRoute
+  '/privacy': typeof PrivacyRoute
   '/products': typeof ProductsRoute
   '/publications': typeof PublicationsRoute
   '/services': typeof ServicesRoute
+  '/terms': typeof TermsRoute
   '/why-ssa': typeof WhySsaRoute
   '/publication/$slug': typeof PublicationSlugRoute
 }
@@ -84,9 +100,11 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/insights': typeof InsightsRoute
+  '/privacy': typeof PrivacyRoute
   '/products': typeof ProductsRoute
   '/publications': typeof PublicationsRoute
   '/services': typeof ServicesRoute
+  '/terms': typeof TermsRoute
   '/why-ssa': typeof WhySsaRoute
   '/publication/$slug': typeof PublicationSlugRoute
 }
@@ -96,9 +114,11 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/insights'
+    | '/privacy'
     | '/products'
     | '/publications'
     | '/services'
+    | '/terms'
     | '/why-ssa'
     | '/publication/$slug'
   fileRoutesByTo: FileRoutesByTo
@@ -106,9 +126,11 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/insights'
+    | '/privacy'
     | '/products'
     | '/publications'
     | '/services'
+    | '/terms'
     | '/why-ssa'
     | '/publication/$slug'
   id:
@@ -116,9 +138,11 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/insights'
+    | '/privacy'
     | '/products'
     | '/publications'
     | '/services'
+    | '/terms'
     | '/why-ssa'
     | '/publication/$slug'
   fileRoutesById: FileRoutesById
@@ -127,9 +151,11 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
   InsightsRoute: typeof InsightsRoute
+  PrivacyRoute: typeof PrivacyRoute
   ProductsRoute: typeof ProductsRoute
   PublicationsRoute: typeof PublicationsRoute
   ServicesRoute: typeof ServicesRoute
+  TermsRoute: typeof TermsRoute
   WhySsaRoute: typeof WhySsaRoute
   PublicationSlugRoute: typeof PublicationSlugRoute
 }
@@ -141,6 +167,13 @@ declare module '@tanstack/react-router' {
       path: '/why-ssa'
       fullPath: '/why-ssa'
       preLoaderRoute: typeof WhySsaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/terms': {
+      id: '/terms'
+      path: '/terms'
+      fullPath: '/terms'
+      preLoaderRoute: typeof TermsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/services': {
@@ -162,6 +195,13 @@ declare module '@tanstack/react-router' {
       path: '/products'
       fullPath: '/products'
       preLoaderRoute: typeof ProductsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/privacy': {
+      id: '/privacy'
+      path: '/privacy'
+      fullPath: '/privacy'
+      preLoaderRoute: typeof PrivacyRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/insights': {
@@ -199,9 +239,11 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
   InsightsRoute: InsightsRoute,
+  PrivacyRoute: PrivacyRoute,
   ProductsRoute: ProductsRoute,
   PublicationsRoute: PublicationsRoute,
   ServicesRoute: ServicesRoute,
+  TermsRoute: TermsRoute,
   WhySsaRoute: WhySsaRoute,
   PublicationSlugRoute: PublicationSlugRoute,
 }

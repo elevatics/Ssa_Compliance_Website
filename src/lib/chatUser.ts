@@ -1,6 +1,9 @@
-const USER_EMAIL_KEY = "ssa-chat-user-email";
+import { PRIVACY_NOTICE_VERSION } from "./privacy";
+
 const ANON_USER_ID_KEY = "ssa-chat-user-id";
 const THREAD_ID_KEY = "ssa-chat-thread-id";
+const LEGACY_EMAIL_KEY = "ssa-chat-user-email";
+const CHAT_CONSENT_KEY = "ssa-chat-consent";
 
 function createId(prefix: string) {
   if (typeof crypto !== "undefined" && "randomUUID" in crypto) {
@@ -9,26 +12,30 @@ function createId(prefix: string) {
   return `${prefix}_${Date.now()}_${Math.random().toString(36).slice(2, 10)}`;
 }
 
-export function getChatUserEmail() {
+export function hasChatConsent() {
+  if (typeof window === "undefined") return false;
+  return localStorage.getItem(CHAT_CONSENT_KEY) === PRIVACY_NOTICE_VERSION;
+}
+
+export function setChatConsent() {
+  if (typeof window === "undefined") return;
+  localStorage.setItem(CHAT_CONSENT_KEY, PRIVACY_NOTICE_VERSION);
+}
+
+export function clearChatConsent() {
+  if (typeof window === "undefined") return;
+  localStorage.removeItem(CHAT_CONSENT_KEY);
+}
+
+export function takeLegacyChatEmail() {
   if (typeof window === "undefined") return null;
-  return localStorage.getItem(USER_EMAIL_KEY);
-}
-
-export function setChatUserEmail(email: string) {
-  if (typeof window === "undefined") return;
-  localStorage.setItem(USER_EMAIL_KEY, email.trim().toLowerCase());
-}
-
-export function clearChatUserEmail() {
-  if (typeof window === "undefined") return;
-  localStorage.removeItem(USER_EMAIL_KEY);
+  const email = localStorage.getItem(LEGACY_EMAIL_KEY);
+  localStorage.removeItem(LEGACY_EMAIL_KEY);
+  return email;
 }
 
 export function getChatUserId() {
   if (typeof window === "undefined") return "ssa-visitor";
-
-  const email = getChatUserEmail();
-  if (email) return email;
 
   const existing = localStorage.getItem(ANON_USER_ID_KEY);
   if (existing) return existing;
@@ -36,6 +43,13 @@ export function getChatUserId() {
   const userId = createId("ssa_user");
   localStorage.setItem(ANON_USER_ID_KEY, userId);
   return userId;
+}
+
+export function resetChatIdentity() {
+  if (typeof window === "undefined") return;
+  localStorage.removeItem(ANON_USER_ID_KEY);
+  localStorage.removeItem(THREAD_ID_KEY);
+  localStorage.removeItem(LEGACY_EMAIL_KEY);
 }
 
 export function getChatThreadId() {
@@ -51,8 +65,4 @@ export function setChatThreadId(threadId: string) {
 export function clearChatThread() {
   if (typeof window === "undefined") return;
   localStorage.removeItem(THREAD_ID_KEY);
-}
-
-export function isValidEmail(value: string) {
-  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value.trim());
 }

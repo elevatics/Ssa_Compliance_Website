@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
+import { Link } from "@tanstack/react-router";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Mail, Shield, CheckCircle2 } from "lucide-react";
+import { X, Shield, CheckCircle2 } from "lucide-react";
 
 const STORAGE_KEY = "ssa_popup_v3";
 const DISMISS_COUNT_KEY = "ssa_popup_dismiss_count";
@@ -14,9 +15,6 @@ function getReopenDelayMs(dismissCount: number) {
 
 export function SubscriptionPopup() {
   const [visible, setVisible] = useState(false);
-  const [email, setEmail] = useState("");
-  const [submitted, setSubmitted] = useState(false);
-  const [error, setError] = useState("");
 
   const reopenTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const dismissCountRef = useRef(0);
@@ -54,21 +52,6 @@ export function SubscriptionPopup() {
   function dismiss() {
     setVisible(false);
     scheduleReopen();
-  }
-
-  function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
-    const trimmed = email.trim();
-    if (!trimmed || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmed)) {
-      setError("Please enter a valid email address.");
-      return;
-    }
-    setError("");
-    console.info("[SSA] Subscription email captured:", trimmed);
-    setSubmitted(true);
-    localStorage.setItem(STORAGE_KEY, "subscribed");
-    if (reopenTimerRef.current) clearTimeout(reopenTimerRef.current);
-    setTimeout(() => setVisible(false), 2800);
   }
 
   return (
@@ -110,74 +93,43 @@ export function SubscriptionPopup() {
               </button>
 
               <div className="px-6 pt-6 pb-7">
-                {!submitted ? (
-                  <>
-                    <div className="flex items-center gap-3 mb-4">
-                      <div className="h-9 w-9 rounded-xl bg-bone border border-rule/60 flex items-center justify-center shrink-0">
-                        <Shield className="h-4 w-4 text-accent-blue stroke-[1.5]" />
-                      </div>
-                      <div>
-                        <div className="eyebrow text-xs mb-0.5">Stay Compliant</div>
-                        <h2 className="font-display text-xl tracking-tight leading-tight">
-                          Get compliance insights
-                          <span className="text-accent-blue font-light"> delivered to you.</span>
-                        </h2>
-                      </div>
-                    </div>
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="h-9 w-9 rounded-xl bg-bone border border-rule/60 flex items-center justify-center shrink-0">
+                    <Shield className="h-4 w-4 text-accent-blue stroke-[1.5]" />
+                  </div>
+                  <div>
+                    <div className="eyebrow text-xs mb-0.5">Stay Compliant</div>
+                    <h2 className="font-display text-xl tracking-tight leading-tight">
+                      Get compliance insights
+                      <span className="text-accent-blue font-light"> on this site.</span>
+                    </h2>
+                  </div>
+                </div>
 
-                    <ul className="space-y-2 mb-5">
-                      {[
-                        "Labour law updates & Apex Court verdicts",
-                        "POSH compliance reminders & templates",
-                        "Pan-India statutory filing calendars",
-                      ].map((item) => (
-                        <li key={item} className="flex items-center gap-2.5 text-sm text-ink/75">
-                          <CheckCircle2 className="h-3.5 w-3.5 text-accent-blue stroke-[2] shrink-0" />
-                          {item}
-                        </li>
-                      ))}
-                    </ul>
+                <ul className="space-y-2 mb-5">
+                  {[
+                    "Labour law updates & Apex Court verdicts",
+                    "POSH compliance reminders & templates",
+                    "Pan-India statutory filing calendars",
+                  ].map((item) => (
+                    <li key={item} className="flex items-center gap-2.5 text-sm text-ink/75">
+                      <CheckCircle2 className="h-3.5 w-3.5 text-accent-blue stroke-[2] shrink-0" />
+                      {item}
+                    </li>
+                  ))}
+                </ul>
 
-                    <form onSubmit={handleSubmit} className="space-y-2.5">
-                      <div className="relative">
-                        <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-ink stroke-[1.5]" />
-                        <input
-                          type="email"
-                          value={email}
-                          onChange={(e) => { setEmail(e.target.value); setError(""); }}
-                          placeholder="Enter your work email"
-                          className="w-full pl-9 pr-3 py-2.5 rounded-xl border border-rule/60 bg-bone text-sm text-ink placeholder:text-muted-ink/60 outline-none focus:ring-2 focus:ring-accent-blue/30 transition"
-                          autoFocus
-                        />
-                      </div>
-                      {error && <p className="text-xs text-red-500 pl-0.5">{error}</p>}
-                      <button
-                        type="submit"
-                        className="w-full bg-ink text-paper py-2.5 rounded-xl text-sm font-normal hover:bg-accent-blue transition"
-                      >
-                        Send me compliance insights
-                      </button>
-                    </form>
+                <Link
+                  to="/insights"
+                  onClick={() => setVisible(false)}
+                  className="block w-full bg-ink text-paper py-2.5 rounded-xl text-sm font-normal hover:bg-accent-blue transition text-center"
+                >
+                  Read the latest insights
+                </Link>
 
-                    <p className="text-xs text-muted-ink/55 text-center mt-3">
-                      No spam. Unsubscribe at any time.
-                    </p>
-                  </>
-                ) : (
-                  <motion.div
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="flex flex-col items-center text-center py-4"
-                  >
-                    <div className="h-12 w-12 rounded-full bg-bone border border-rule/60 flex items-center justify-center mb-4">
-                      <CheckCircle2 className="h-6 w-6 text-accent-blue stroke-[1.5]" />
-                    </div>
-                    <h3 className="font-display text-xl tracking-tight mb-2">You're in.</h3>
-                    <p className="text-sm text-muted-ink font-light leading-relaxed max-w-[220px]">
-                      Compliance insights will be delivered to your inbox shortly.
-                    </p>
-                  </motion.div>
-                )}
+                <p className="text-xs text-muted-ink/55 text-center mt-3">
+                  No email is collected here.
+                </p>
               </div>
             </div>
           </motion.div>

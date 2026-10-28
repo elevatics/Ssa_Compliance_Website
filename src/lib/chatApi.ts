@@ -167,8 +167,7 @@ export async function getThreadMessages(threadId: string, limit = 50) {
   return data.messages;
 }
 
-export async function deleteThread(threadId: string) {
-  const userId = getChatUserId();
+export async function deleteThread(threadId: string, userId = getChatUserId()) {
   const params = new URLSearchParams({ user_id: userId });
 
   const response = await fetch(
@@ -179,6 +178,26 @@ export async function deleteThread(threadId: string) {
   if (!response.ok) {
     throw new Error(await parseError(response));
   }
+}
+
+export async function deleteThreadsForUser(userId: string) {
+  const params = new URLSearchParams({
+    user_id: userId,
+    limit: "50",
+    order: "desc",
+  });
+
+  const response = await fetch(`${CHAT_API_BASE}/api/v1/threads?${params.toString()}`);
+  if (!response.ok) {
+    throw new Error(await parseError(response));
+  }
+
+  const data = (await response.json()) as { threads: Thread[] };
+  await Promise.all(data.threads.map((thread) => deleteThread(thread.id, userId)));
+}
+
+export async function deleteAllThreads() {
+  await deleteThreadsForUser(getChatUserId());
 }
 
 export async function resolveLatestThreadId() {

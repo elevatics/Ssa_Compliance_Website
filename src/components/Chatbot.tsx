@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect, useCallback, type ComponentProps } from "react";
+import { Link } from "@tanstack/react-router";
 import { motion, AnimatePresence } from "framer-motion";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
@@ -10,9 +11,11 @@ import {
   User,
   AlertCircle,
   Plus,
-  Loader2,
+  Trash2,
 } from "lucide-react";
 import {
+  deleteAllThreads,
+  deleteThreadsForUser,
   getThreadMessages,
   listThreads,
   streamChat,
@@ -20,12 +23,14 @@ import {
   type Thread,
 } from "@/lib/chatApi";
 import {
+  clearChatConsent,
   clearChatThread,
   getChatThreadId,
-  getChatUserEmail,
-  isValidEmail,
+  hasChatConsent,
+  resetChatIdentity,
+  setChatConsent,
   setChatThreadId,
-  setChatUserEmail,
+  takeLegacyChatEmail,
 } from "@/lib/chatUser";
 
 type Message = {
@@ -146,10 +151,10 @@ function truncateTitle(title: string | undefined, max = 42) {
 
 export function Chatbot() {
   const [open, setOpen] = useState(false);
-  const [email, setEmail] = useState(() => getChatUserEmail() ?? "");
-  const [emailDraft, setEmailDraft] = useState("");
-  const [emailError, setEmailError] = useState<string | null>(null);
-  const [needsEmail, setNeedsEmail] = useState(() => !getChatUserEmail());
+  const [consentChecked, setConsentChecked] = useState(false);
+  const [needsConsent, setNeedsConsent] = useState(() => !hasChatConsent());
+  const [deleting, setDeleting] = useState(false);
+  const [consentNotice, setConsentNotice] = useState<string | null>(null);
   const [messages, setMessages] = useState<Message[]>(welcomeMessages);
   const [threads, setThreads] = useState<Thread[]>([]);
   const [threadsLoading, setThreadsLoading] = useState(false);
@@ -166,10 +171,10 @@ export function Chatbot() {
   const [activeThreadId, setActiveThreadId] = useState<string | null>(getChatThreadId());
 
   useEffect(() => {
-    if (open && !needsEmail) {
+    if (open && !needsConsent) {
       setTimeout(() => inputRef.current?.focus(), 300);
     }
-  }, [open, needsEmail]);
+  }, [open, needsConsent]);
 
   const scrollToBottom = useCallback((behavior: ScrollBehavior = "smooth") => {
     const container = messagesRef.current;
@@ -208,7 +213,7 @@ export function Chatbot() {
   }, []);
 
   const refreshThreads = useCallback(async () => {
-    if (needsEmail) return;
+    if (needsConsent) return;
 
     setThreadsLoading(true);
     try {
@@ -219,7 +224,7 @@ export function Chatbot() {
     } finally {
       setThreadsLoading(false);
     }
-  }, [needsEmail]);
+  }, [needsConsent]);
 
   const loadThreadMessages = useCallback(async (threadId: string) => {
     try {
@@ -246,28 +251,28 @@ export function Chatbot() {
   }, []);
 
   useEffect(() => {
-    if (open && !needsEmail) {
+    if (open && !needsConsent) {
       void refreshThreads();
       const storedThreadId = threadIdRef.current ?? getChatThreadId();
       if (storedThreadId) {
         void loadThreadMessages(storedThreadId);
       }
     }
-  }, [open, needsEmail, refreshThreads, loadThreadMessages]);
+  }, [open, needsConsent, refreshThreads, loadThreadMessages]);
 
-  function handleEmailSubmit(e: React.FormEvent) {
+  useEffect(() => {
+    const legacyEmail = takeLegacyChatEmail();
+    if (!legacyEmail) return;
+    void deleteThreadsForUser(legacyEmail).catch(() => {
+      // The email is already removed from this browser. SSA can still delete a server copy on request.
+    });
+  }, []);
+
+  function handleConsentSubmit(e: React.FormEvent) {
     e.preventDefault();
-    const trimmed = emailDraft.trim();
-
-    if (!isValidEmail(trimmed)) {
-      setEmailError("Please enter a valid email address.");
-      return;
-    }
-
-    setChatUserEmail(trimmed);
-    setEmail(trimmed);
-    setEmailError(null);
-    setNeedsEmail(false);
+    if (!consentChecked) return;
+    setChatConsent();
+    setNeedsConsent(false);
   }
 
   function startNewChat() {
@@ -293,7 +298,7 @@ export function Chatbot() {
 
   async function sendMessage(text: string) {
     const trimmed = text.trim();
-    if (!trimmed || typing || needsEmail) return;
+    if (!trimmed || typing || needsConsent || deleting) return;
 
     setError(null);
     abortRef.current?.abort();
@@ -418,6 +423,37 @@ export function Chatbot() {
     void sendMessage(input);
   }
 
+  async function deleteMyChatData() {
+    setDeleting(true);
+    setError(null);
+    abortRef.current?.abort();
+
+    let serverDeleted = true;
+    try {
+      await deleteAllThreads();
+    } catch {
+      serverDeleted = false;
+    }
+
+    resetChatIdentity();
+    clearChatConsent();
+    threadIdRef.current = null;
+    setActiveThreadId(null);
+    setThreads([]);
+    setMessages(welcomeMessages());
+    setInput("");
+    setTyping(false);
+    setToolStatus(null);
+    setConsentChecked(false);
+    setNeedsConsent(true);
+    setDeleting(false);
+    setConsentNotice(
+      serverDeleted
+        ? null
+        : "This browser was cleared. The chat service did not confirm every conversation was deleted. Email info@ssahrc.com if a copy remains.",
+    );
+  }
+
   const showQuickReplies =
     messages.length <= 1 && !typing && messages[0]?.id === "welcome";
 
@@ -434,7 +470,7 @@ export function Chatbot() {
           <div className="min-w-0">
             <div className="text-[14px] font-normal">SSA Assistant</div>
             <div className="text-[11px] text-paper/50 truncate">
-              {typing ? "Typing…" : email ? `${email} · Online` : "Compliance Services · Online"}
+              {typing ? "Typing…" : "Compliance Services · Online"}
             </div>
           </div>
         </div>
@@ -448,6 +484,16 @@ export function Chatbot() {
             title="New chat"
           >
             <Plus className="h-4 w-4" />
+          </button>
+          <button
+            type="button"
+            onClick={() => void deleteMyChatData()}
+            disabled={deleting || typing}
+            className="h-8 w-8 rounded-full hover:bg-paper/10 flex items-center justify-center transition disabled:opacity-40"
+            aria-label="Delete my chat data"
+            title="Delete my chat data"
+          >
+            <Trash2 className="h-4 w-4" />
           </button>
           <button
             type="button"
@@ -570,12 +616,12 @@ export function Chatbot() {
           value={input}
           onChange={(e) => setInput(e.target.value)}
           placeholder="Ask about our services…"
-          disabled={typing || needsEmail}
+          disabled={typing || needsConsent || deleting}
           className="flex-1 bg-bone rounded-full px-4 py-2.5 text-[13px] text-ink placeholder:text-muted-ink/60 outline-none focus:ring-2 focus:ring-accent-blue/30 transition disabled:opacity-60"
         />
         <button
           type="submit"
-          disabled={!input.trim() || typing || needsEmail}
+          disabled={!input.trim() || typing || needsConsent || deleting}
           className="h-9 w-9 rounded-full bg-ink text-paper flex items-center justify-center hover:bg-accent-blue transition disabled:opacity-40 shrink-0"
           aria-label="Send message"
         >
@@ -611,9 +657,9 @@ export function Chatbot() {
       </AnimatePresence>
 
       <AnimatePresence>
-        {open && needsEmail && (
+        {open && needsConsent && (
           <motion.div
-            key="email-gate"
+            key="consent-gate"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -630,27 +676,38 @@ export function Chatbot() {
                   <Bot className="h-5 w-5 text-accent-blue" />
                 </div>
                 <div>
-                  <h2 className="text-[16px] font-normal text-ink">Enter your email</h2>
+                  <h2 className="text-[16px] font-normal text-ink">Before you chat</h2>
                   <p className="text-[12px] text-muted-ink">
-                    We use your email to save and continue your conversations.
+                    SSA stores this conversation so you can continue it. Do not include employee
+                    records or anyone else’s personal data.
                   </p>
                 </div>
               </div>
 
-              <form onSubmit={handleEmailSubmit} className="space-y-3">
-                <input
-                  type="email"
-                  value={emailDraft}
-                  onChange={(e) => {
-                    setEmailDraft(e.target.value);
-                    setEmailError(null);
-                  }}
-                  placeholder="you@company.com"
-                  autoFocus
-                  className="w-full rounded-2xl border border-rule/60 bg-bone px-4 py-3 text-[13px] text-ink outline-none focus:ring-2 focus:ring-accent-blue/30"
-                />
-                {emailError && (
-                  <p className="text-[12px] text-accent-orange">{emailError}</p>
+              <form onSubmit={handleConsentSubmit} className="space-y-3">
+                <div className="flex items-start gap-2.5 text-[13px] text-muted-ink">
+                  <input
+                    id="chat-consent"
+                    type="checkbox"
+                    checked={consentChecked}
+                    onChange={(e) => setConsentChecked(e.target.checked)}
+                    className="mt-0.5 h-4 w-4 rounded border-rule accent-ink"
+                  />
+                  <label htmlFor="chat-consent" className="cursor-pointer">
+                    I consent to SSA storing my messages to answer this chat.
+                  </label>
+                </div>
+                <p className="text-[12px] text-muted-ink">
+                  <Link
+                    to="/privacy"
+                    className="text-accent-blue underline underline-offset-2"
+                    onClick={() => setOpen(false)}
+                  >
+                    Privacy Notice
+                  </Link>
+                </p>
+                {consentNotice && (
+                  <p className="text-[12px] text-accent-orange">{consentNotice}</p>
                 )}
                 <div className="flex items-center justify-end gap-2 pt-1">
                   <button
@@ -662,7 +719,8 @@ export function Chatbot() {
                   </button>
                   <button
                     type="submit"
-                    className="rounded-full bg-ink px-5 py-2 text-[13px] text-paper hover:bg-accent-blue transition"
+                    disabled={!consentChecked}
+                    className="rounded-full bg-ink px-5 py-2 text-[13px] text-paper hover:bg-accent-blue transition disabled:opacity-40"
                   >
                     Continue
                   </button>
@@ -674,7 +732,7 @@ export function Chatbot() {
       </AnimatePresence>
 
       <AnimatePresence>
-        {open && !needsEmail && (
+        {open && !needsConsent && (
           <motion.div
             key="chat-panel"
             initial={{ opacity: 0, y: 24, scale: 0.95 }}

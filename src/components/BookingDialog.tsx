@@ -1,5 +1,6 @@
 import { useEffect, useState, type ReactNode, type FormEvent } from "react";
 import { createPortal } from "react-dom";
+import { Link } from "@tanstack/react-router";
 import {
   X,
   CheckCircle2,
@@ -73,6 +74,7 @@ export function BookingDialog({ trigger }: BookingDialogProps) {
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
   const [acceptedTerms, setAcceptedTerms] = useState(false);
+  const [acceptedPrivacy, setAcceptedPrivacy] = useState(false);
   const [otpPopupOpen, setOtpPopupOpen] = useState(false);
   const [pendingEmail, setPendingEmail] = useState("");
 
@@ -95,6 +97,7 @@ export function BookingDialog({ trigger }: BookingDialogProps) {
     setSubmitted(false);
     setError("");
     setAcceptedTerms(false);
+    setAcceptedPrivacy(false);
     setOtpPopupOpen(false);
     setPendingEmail("");
   };
@@ -115,8 +118,13 @@ export function BookingDialog({ trigger }: BookingDialogProps) {
     e.preventDefault();
     setError("");
 
+    if (!acceptedPrivacy) {
+      setError("Please consent to use of your details for this demo request.");
+      return;
+    }
+
     if (!acceptedTerms) {
-      setError("Please accept the Privacy Policy & Terms to continue");
+      setError("Please accept the Terms of Service.");
       return;
     }
 
@@ -460,16 +468,44 @@ export function BookingDialog({ trigger }: BookingDialogProps) {
 
                   <div className="h-px bg-rule/60" />
 
-                  <label className="flex items-start gap-2.5 text-[13px] text-muted-ink font-light cursor-pointer">
+                  <div className="flex items-start gap-2.5 text-[13px] text-muted-ink font-light">
                     <input
+                      id="demo-privacy-consent"
+                      type="checkbox"
+                      checked={acceptedPrivacy}
+                      onChange={(e) => setAcceptedPrivacy(e.target.checked)}
+                      className="mt-0.5 h-4 w-4 rounded border-rule accent-ink"
+                      required
+                    />
+                    <label htmlFor="demo-privacy-consent" className="cursor-pointer">
+                      I consent to SSA using my name, email, phone, and company details to contact
+                      me about this demo.
+                    </label>
+                  </div>
+                  <p className="text-[12px] text-muted-ink/80 font-light -mt-2 pl-6">
+                    <Link to="/privacy" className="text-accent-blue underline underline-offset-2">
+                      Privacy Notice
+                    </Link>
+                  </p>
+
+                  <div className="flex items-start gap-2.5 text-[13px] text-muted-ink font-light">
+                    <input
+                      id="demo-terms"
                       type="checkbox"
                       checked={acceptedTerms}
                       onChange={(e) => setAcceptedTerms(e.target.checked)}
                       className="mt-0.5 h-4 w-4 rounded border-rule accent-ink"
                       required
                     />
-                    <span>I accept the Privacy Policy &amp; Terms.</span>
-                  </label>
+                    <label htmlFor="demo-terms" className="cursor-pointer">
+                      I accept the Terms of Service.
+                    </label>
+                  </div>
+                  <p className="text-[12px] text-muted-ink/80 font-light -mt-2 pl-6">
+                    <Link to="/terms" className="text-accent-blue underline underline-offset-2">
+                      Terms of Service
+                    </Link>
+                  </p>
 
                   <button
                     type="submit"
@@ -487,8 +523,8 @@ export function BookingDialog({ trigger }: BookingDialogProps) {
                   </button>
 
                   <p className="text-[11px] text-muted-ink/60 text-center font-light">
-                    Your information is kept strictly confidential and never shared with third
-                    parties.
+                    SSA uses this information to contact you about your demo request. The booking
+                    service that receives the form is named in the Privacy Notice.
                   </p>
                 </form>
               )}

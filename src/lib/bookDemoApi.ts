@@ -1,3 +1,5 @@
+import { DEMO_CONSENT_PURPOSE, PRIVACY_NOTICE_VERSION } from "./privacy";
+
 const API_BASE_URL = (
   import.meta.env.VITE_API_BASE_URL ?? "https://api.legum.ai"
 ).replace(/\/$/, "");
@@ -26,6 +28,16 @@ type OTPVerifyData = {
   otp: number;
 };
 
+function demoConsentRecord() {
+  return {
+    privacyConsent: true,
+    termsAccepted: true,
+    privacyNoticeVersion: PRIVACY_NOTICE_VERSION,
+    consentPurpose: DEMO_CONSENT_PURPOSE,
+    consentAt: new Date().toISOString(),
+  };
+}
+
 export async function registerBookDemoUser(
   data: BookDemoData,
 ): Promise<ApiResponse<{ message: string }>> {
@@ -33,7 +45,7 @@ export async function registerBookDemoUser(
     const response = await fetch(`${API_BASE_URL}/api/book-demo-user/register`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(data),
+      body: JSON.stringify({ ...data, ...demoConsentRecord() }),
     });
 
     const result = await response.json();
