@@ -1,4 +1,5 @@
 import { Link } from "@tanstack/react-router";
+import { openCookieSettings } from "@/lib/analytics";
 import { Phone, Mail, Globe, Linkedin } from "lucide-react";
 import ssaLogoDark from "../assets/SSA LOGO-dark.png";
 
@@ -143,6 +144,14 @@ export function SiteFooter() {
             <Link to="/terms" className="hover:text-white transition">
               Terms of Service
             </Link>
+            <span className="mx-2 text-white/35">·</span>
+            <button
+              type="button"
+              onClick={openCookieSettings}
+              className="hover:text-white transition"
+            >
+              Cookie settings
+            </button>
           </p>
           <p className="mt-2 text-center text-[12px] text-white/55">
             © all rights reserved – SSA COMPLIANCE SERVICES LLP.

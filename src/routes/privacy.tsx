@@ -20,7 +20,7 @@ export const Route = createFileRoute("/privacy")({
 
 function PrivacyPage() {
   return (
-    <LegalPage eyebrow="DPDP notice" title="Privacy Notice" updated="26 October 2026">
+    <LegalPage eyebrow="DPDP notice" title="Privacy Notice" updated="29 October 2026">
       <p>
         This notice explains how SSA Compliance Services LLP (“SSA”), #C21, 3rd Floor, Unispace,
         Plot No. 128-P2, near Ginger Hotel, EPIP Zone, Whitefield, Bengaluru, Karnataka 560066,
@@ -44,7 +44,9 @@ function PrivacyPage() {
         </li>
         <li>
           <span className="text-ink">This browser.</span> A flag that you accepted the chat notice,
-          and a flag that you closed the insights prompt. These are not used to identify you.
+          a flag for your analytics choice, and a flag that you closed the insights prompt. Cookie
+          settings in the footer changes the analytics choice. Delete my chat data clears the chat
+          id.
         </li>
       </ul>
       <p>
@@ -56,9 +58,10 @@ function PrivacyPage() {
       <h2>Who processes it for SSA</h2>
       <p>
         Demo requests and one-time codes are sent to the booking service at api.legum.ai. Chat
-        messages are sent to the chat service at legum-website-chat.elevatics.site. Those providers
-        process the data for SSA. They are not allowed to use it for their own purposes. SSA remains
-        responsible for this data.
+        messages are sent to the chat service at legum-website-chat.elevatics.site. If you accept
+        analytics, visit measurements are sent to Google (Google Analytics). The typeface is loaded
+        from Google Fonts. Those providers process that data for SSA. SSA remains responsible for
+        it. A contract with each provider is still for the firm to put in place.
       </p>
 
       <h2>How long it is kept</h2>
@@ -75,6 +78,7 @@ function PrivacyPage() {
         <li>Withdraw consent for a demo request or a chat by emailing {GRIEVANCE_EMAIL}.</li>
         <li>Ask for access, correction, or erasure of your personal data at the same address.</li>
         <li>Use “Delete my chat data” in the assistant to clear this browser and request deletion of its conversations.</li>
+        <li>Use Cookie settings in the footer to reject or accept Google Analytics. Reject stops the tag and clears its cookies in this browser.</li>
         <li>
           Raise a grievance with SSA at {GRIEVANCE_EMAIL}, subject “Privacy grievance”. If you are
           not satisfied, you may approach the Data Protection Board of India.
@@ -84,6 +88,24 @@ function PrivacyPage() {
         SSA has not published the name of a grievance officer on this page yet. Write to the email
         above until the firm adds that contact.
       </p>
+
+      <h2>Cookies and browser storage</h2>
+      <ul>
+        <li>
+          <span className="text-ink">_ga and _ga_*</span> — set by Google Analytics only after you
+          click Accept. They recognise a browser for visit measurement. Reject, or Cookie settings,
+          deletes them here.
+        </li>
+        <li>
+          <span className="text-ink">No other cookies</span> are set for advertising or for running
+          the site. The sidebar cookie in the component library is not used.
+        </li>
+        <li>
+          <span className="text-ink">localStorage.</span> ssa-analytics-consent (Accept or Reject),
+          ssa-chat-consent, ssa-chat-user-id, ssa-chat-thread-id, and the insights-prompt dismiss
+          count. These stay in this browser and are not sent as cookies.
+        </li>
+      </ul>
 
       <h2>Children</h2>
       <p>This website is for businesses and their staff. It is not meant for anyone under 18.</p>

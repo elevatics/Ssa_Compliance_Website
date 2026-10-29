@@ -1,5 +1,6 @@
 import { Outlet, Link, createRootRoute, HeadContent } from "@tanstack/react-router";
 import { Chatbot } from "@/components/Chatbot";
+import { CookieConsent } from "@/components/CookieConsent";
 import { SubscriptionPopup } from "@/components/SubscriptionPopup";
 
 function NotFoundComponent() {
@@ -36,6 +37,7 @@ function RootComponent() {
       <Outlet />
       <Chatbot />
       <SubscriptionPopup />
+      <CookieConsent />
     </>
   );
 }
